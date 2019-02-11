@@ -60,7 +60,7 @@ async function createCampaign(req, res, next) {
       if(error.code === 11000) {
         next({
           status : 400,
-          message : 'Non unique'
+          message : 'Campiagn channel, type, products promoted, phase, touch and audience segment values are not unique.'
         });
       }
       

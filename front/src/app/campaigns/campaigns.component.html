@@ -1,0 +1,234 @@
+<mat-card class="main-card">
+    <main>
+        <input
+            id="tab1"
+            type="radio"
+            name="tabs"
+            checked
+            (change)="onFilterChange($event)"
+            />
+        <label for="tab1">All Campaigns
+            <span
+                [ngClass]="{ 'span-active': selectedTab === 'tab1' }"
+                style="padding-left: 10px;">{{campaignsCommon.length}}</span></label>
+
+        <input
+            id="tab2"
+            type="radio"
+            name="tabs"
+            (change)="onFilterChange($event)"
+            />
+        <label for="tab2">My Campaigns
+            <span
+                [ngClass]="{ 'span-active': selectedTab === 'tab2' }"
+                style="padding-left: 10px;">{{campaignsUser.length}}</span></label>
+
+        <section id="content1">
+            <div class="row">
+                <div class="col-sm-4 col-md-6 col-lg-8 col-xs-0"></div>
+                <form class="navbar-form" role="search" class="col-sm-4 col-md-3
+                    col-lg-2 col-xs-6">
+                    <div class="input-group add-on">
+                        <input
+                            class="form-control"
+                            placeholder="  Search"
+                            name="srch-term"
+                            id="srch-term"
+                            type="text"
+                            (input)="onSearchChange($event.target.value)"
+                            />
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xs-6">
+                    <select class="form-control" (change)="sortBy($event)">
+                        <option hidden>Sort By</option>
+                        <option *ngFor="let ele of sortByElements" [value]=ele>
+                            {{ ele }}</option>
+                    </select>
+                </div>
+            </div>
+            <mat-list *ngIf="campaignsCommon.length > 0">
+                <mat-list-item *ngFor="let campaign of pagedItems">
+                    <mat-icon mat-list-icon class="campaign-icon">collections_bookmark</mat-icon>
+                    <h4 mat-line class="campaign-name" (click)="openCampaignModal(campaign)">{{ campaign.name }}</h4>
+                    <p mat-line style="color: #0087e0"><span> Campaign ID: </span>{{
+                        campaign.campaignId }}</p>
+                    <p mat-line><span> Description: </span>{{
+                        campaign.description }}</p>
+                    <div class="row" mat-line>
+                        <div class="col-sm-4">
+                            <p>
+                                <span> Created Date: </span>{{
+                                    campaign.createTimestamp | date }}
+                            </p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p>
+                                <span>Channel: </span>{{
+                                campaign.channel }}
+                            </p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><span> Campaign Type: </span>{{ campaign.campaignType }}</p>
+                        </div>
+                    </div>
+                    <div class="row" mat-line>
+                        <div class="col-sm-4">
+                            <p><span>Campaign Category: </span>{{
+                                campaign.campaignCategory }}</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><span> Phase: </span>{{ campaign.phase}}</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p>
+                                <span> Number of Creatives: </span>{{
+                                campaign.numOfCreatives }}
+                            </p>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </mat-list>
+
+            <div class="pagination-div" *ngIf="campaignsCommon.length > 0">
+                <ul *ngIf="pager.pages && pager.pages.length"
+                    class="pagination">
+                    <li [ngClass]="{ disabled: pager.currentPage === 1 }">
+                        <a (click)="setPage(1)">First</a>
+                    </li>
+                    <li [ngClass]="{ disabled: pager.currentPage === 1 }">
+                        <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                    </li>
+                    <li
+                        *ngFor="let page of pager.pages"
+                        [ngClass]="{ active: pager.currentPage === page }">
+                        <a (click)="setPage(page)">{{ page }}</a>
+                    </li>
+                    <li [ngClass]="{ disabled: pager.currentPage ===
+                        pager.totalPages }">
+                        <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                    </li>
+                    <li [ngClass]="{ disabled: pager.currentPage ===
+                        pager.totalPages }">
+                        <a (click)="setPage(pager.totalPages)">Last</a>
+                    </li>
+                </ul>
+            </div>
+
+            <p  *ngIf="campaignsCommon.length < 1">
+                No Campaigns Available
+            </p>
+        </section>
+
+       
+
+        <section id="content2">
+            <div class="row">
+                <div class="col-sm-4 col-md-6 col-lg-8 col-xs-0"></div>
+                <form class="navbar-form" role="search" class="col-sm-4 col-md-3
+                    col-lg-2 col-xs-6">
+                    <div class="input-group add-on">
+                        <input
+                        class="form-control"
+                        placeholder="  Search"
+                        name="srch-term"
+                        id="srch-term"
+                        type="text"
+                        (input)="onSearchChange($event.target.value)"
+                            />
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xs-6">
+                    <select class="form-control" (change)="sortBy($event)">
+                        <option hidden>Sort By</option>
+                        <option *ngFor="let ele of sortByElements" [value]=ele>
+                            {{ ele }}</option>
+                    </select>
+                </div>
+            </div>
+            <mat-list *ngIf="campaignsUser.length > 0">
+                    <mat-list-item *ngFor="let campaign of pagedItems">
+                        <mat-icon mat-list-icon class="campaign-icon">collections_bookmark</mat-icon>
+                        <h4 mat-line class="campaign-name" (click)="openCampaignModal(campaign)">{{ campaign.name }}</h4>
+                        <p mat-line style="color: #0087e0"><span> Campaign ID: </span>{{
+                            campaign.campaignId }}</p>
+                        <p mat-line><span> Description: </span>{{
+                            campaign.description }}</p>
+                        <div class="row" mat-line>
+                            <div class="col-sm-4">
+                                <p>
+                                    <span> Created Date: </span>{{
+                                        campaign.createTimestamp | date }}
+                                </p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p>
+                                    <span>Channel: </span>{{
+                                    campaign.channel }}
+                                </p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p><span> Campaign Type: </span>{{ campaign.campaignType }}</p>
+                            </div>
+                        </div>
+                        <div class="row" mat-line>
+                            <div class="col-sm-4">
+                                <p><span>Campaign Category: </span>{{
+                                    campaign.campaignCategory }}</p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p><span> Phase: </span>{{ campaign.phase}}</p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p>
+                                    <span> Number of Creatives: </span>{{
+                                    campaign.numOfCreatives }}
+                                </p>
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </mat-list>
+
+            <div class="pagination-div"  *ngIf="campaignsUser.length > 0">
+                <ul *ngIf="pager.pages && pager.pages.length"
+                    class="pagination">
+                    <li [ngClass]="{ disabled: pager.currentPage === 1 }">
+                        <a (click)="setPage(1)">First</a>
+                    </li>
+                    <li [ngClass]="{ disabled: pager.currentPage === 1 }">
+                        <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                    </li>
+                    <li
+                        *ngFor="let page of pager.pages"
+                        [ngClass]="{ active: pager.currentPage === page }">
+                        <a (click)="setPage(page)">{{ page }}</a>
+                    </li>
+                    <li [ngClass]="{ disabled: pager.currentPage ===
+                        pager.totalPages }">
+                        <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                    </li>
+                    <li [ngClass]="{ disabled: pager.currentPage ===
+                        pager.totalPages }">
+                        <a (click)="setPage(pager.totalPages)">Last</a>
+                    </li>
+                </ul>
+            </div>
+            <p *ngIf="campaignsUser.length < 1">
+                No Campaigns Available
+            </p>
+        </section>
+        
+    </main>
+</mat-card>

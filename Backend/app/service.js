@@ -16,9 +16,8 @@ async function createCampaign(request) {
   let { body } = request;
   let item = JSON.parse(JSON.stringify(body));
   let cleanItem = {};
-
-  //add channel as well in hashObj
   let hashObj = {
+    channel: body.channel,
     campaignType: body.campaignType,
     product:body.product,
     phase:body.phase,

@@ -1,0 +1,8 @@
+<app-header></app-header>
+<router-outlet></router-outlet>
+<div id="mybutton" *ngIf="activatedRoute.snapshot['_routerState'].url === '/main/dashboard'">
+        <button mat-fab style="background-color: #eb7a10" matTooltip="Create new
+                campaign" (click) = "addNewCampaign()">
+                <mat-icon>add</mat-icon>
+        </button>
+</div>

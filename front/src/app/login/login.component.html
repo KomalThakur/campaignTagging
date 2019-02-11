@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
+<div class="wrap">
+  <form class="login">
+    <div class="toggle-bar">
+      <div class="toggle-login active">
+        <span>Login</span>
+      </div>
+    </div>
+    <div class="login-body">
+      <div class="input-section">
+        <i class="fas fa-user"></i>
+        <input class="user-input" type="email" placeholder="Email" [(ngModel)] = "user.email" name="email">
+      </div>
+      <div class="input-section">
+        <i class="fas fa-lock"></i>
+        <input class="user-input" type="password" placeholder="Password" [(ngModel)] = "user.password" name="password">
+      </div>
+      <p style="color: red" *ngIf="invalidLogin"> Invalid Username/ Password</p>
+      <button class="btn" id="btn-login" (click)="login()">Login</button>
+    </div>
+  </form>  
+</div>

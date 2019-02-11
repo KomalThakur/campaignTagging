@@ -1,0 +1,43 @@
+.main-card {
+    margin-top: 10px;
+}
+
+.divider {
+    position: relative !important; 
+}
+
+.form-field {
+    width: 100%;
+    }
+    
+    ::ng-deep .mat-form-field-wrapper{
+     padding-bottom: 0;
+    }
+    
+    .form-card {
+        margin: 10px 20% 10px 20%;
+    }
+    
+    @media only screen and (max-width: 600px) {
+        .form-card {
+            margin: 10px;
+        }
+      }
+    
+    .next-div {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .mat-select {
+        border: none;
+    }
+.form-title {
+    color: #f77d0e;
+}
+
+::ng-deep .mat-radio-button {
+    margin-right: 30px;
+}
