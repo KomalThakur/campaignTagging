@@ -56,7 +56,7 @@
                 <mat-list-item *ngFor="let campaign of pagedItems">
                     <mat-icon mat-list-icon class="campaign-icon">collections_bookmark</mat-icon>
                     <h4 mat-line class="campaign-name" (click)="openCampaignModal(campaign)">{{ campaign.name }}</h4>
-                    <p mat-line style="color: #0087e0"><span> Campaign ID: </span>{{
+                    <p mat-line><span> Campaign ID: </span>{{
                         campaign.campaignId }}</p>
                     <p mat-line><span> Description: </span>{{
                         campaign.description }}</p>
@@ -161,7 +161,7 @@
                     <mat-list-item *ngFor="let campaign of pagedItems">
                         <mat-icon mat-list-icon class="campaign-icon">collections_bookmark</mat-icon>
                         <h4 mat-line class="campaign-name" (click)="openCampaignModal(campaign)">{{ campaign.name }}</h4>
-                        <p mat-line style="color: #0087e0"><span> Campaign ID: </span>{{
+                        <p mat-line ><span> Campaign ID: </span>{{
                             campaign.campaignId }}</p>
                         <p mat-line><span> Description: </span>{{
                             campaign.description }}</p>
