@@ -56,7 +56,6 @@ import { CampaignDialogEmailComponent } from './campaign-dialog-email/campaign-d
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { EmailCampaignFormComponent } from './email-campaign-form/email-campaign-form.component';
 import { PnCampaignFormComponent } from './pn-campaign-form/pn-campaign-form.component';
-import { CampaignDialogPnComponent } from './campaign-dialog-pn/campaign-dialog-pn.component';
 import { ChecklistDatabase } from './shared/checklist-database.service';
 import { CreateFormDataComponent } from './create-form-data/create-form-data.component';
 import { AuthGuardService } from './shared/auth-guard.service';
@@ -74,7 +73,6 @@ import { SearchPipe } from './filters/search.pipe';
     ConfirmationDialogComponent,
     EmailCampaignFormComponent,
     PnCampaignFormComponent,
-    CampaignDialogPnComponent,
     CreateFormDataComponent
   ],
   imports: [
@@ -120,6 +118,6 @@ import { SearchPipe } from './filters/search.pipe';
     AppRoutingModule
   ],
   providers: [DataStorageService, PagerService, ChecklistDatabase, AuthGuardService, SearchPipe], 
-  bootstrap: [AppComponent, CampaignDialogEmailComponent, ConfirmationDialogComponent, CampaignDialogPnComponent]
+  bootstrap: [AppComponent, CampaignDialogEmailComponent, ConfirmationDialogComponent]
 })
 export class AppModule { }

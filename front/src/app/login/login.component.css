@@ -20,23 +20,29 @@
     width: 100%;
     height: 50px;
     display: flex;
+    border-bottom: grey solid 1px 
   }
-  .toggle-bar > :first-child {
-    border-right: 1px solid #0087e0;
+  .navbar-brand {
+    position: absolute;
+    left: 50%;
+    margin-left: -75px !important;  
+    display: block;
   }
-  .toggle-bar > :last-child {
-    border-left: 1px solid #0087e0;
+
+  mat-divider {
+    color: grey;
+    width: 1px;
   }
-  
   .toggle-login, .toggle-register {
     width: 100%;
-    background:linear-gradient(to bottom,#139ff0 0,#0087e0 100%);
+    background:linear-gradient(to bottom,#4359c5 0,#162d9a 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: background 0.3s;
     font-size: 25px;
+    font-family: "SamsungOne",arial;
   }
   .toggle-login span, .toggle-register span {
     color: #fff;
@@ -48,7 +54,7 @@
   }
   
   .active {
-    background: linear-gradient(to bottom,#139ff0 0,#0087e0 100%);
+    background: linear-gradient(to bottom,#4359c5 0,#162d9a 100%);
   }
   
   .login-body, .register-body {
@@ -56,6 +62,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    font-family: "SamsungOne",arial;
   }
   .login-body p, .register-body p {
     color: #5f5f5f;
@@ -63,6 +70,7 @@
     cursor: pointer;
     transition: color 0.2s;
     margin-bottom: 8px;
+    font-family: "SamsungOne",arial;
   }
   .login-body p:hover, .register-body p:hover {
     color: #2f2f2f;
@@ -84,10 +92,11 @@
   input.user-input, .btn.user-input {
     border: 1px solid #ddd;
     font-size: 20px;
+    font-family: "SamsungOne",arial;
   }
   
   .btn {
-    background: linear-gradient(to bottom,#fc8c14 0,#f77d0e 100%);
+    background: linear-gradient(to bottom,#4359c5 0,#162d9a 100%);
     color: #fff;
     border: none;
     margin-bottom: 30px;
@@ -96,10 +105,11 @@
     padding: 10px 15px;
     width: 280px;
     margin-left: 20px;
+    font-family: "SamsungOne",arial;
   }
   
   .btn:hover {
-    background: linear-gradient(to bottom,#e47a0a 0,#d86a03 100%);
+    background: linear-gradient(to bottom,#485285 0,#2b42b4 100%);
     cursor: pointer;
   }
   
@@ -110,4 +120,12 @@
   
   .user-input:focus {
     border: 1px solid #aaa;
+  }
+
+  .logo-div {
+    position: absolute;
+  left: 50%;
+  margin-left: -75px !important;  
+  display: block;
+  margin-top: 12px;
   }

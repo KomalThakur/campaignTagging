@@ -7,7 +7,7 @@
             checked
             (change)="onFilterChange($event)"
             />
-        <label for="tab1">All Campaigns
+        <label for="tab1" class="text-font">ALL CAMPAIGNS
             <span
                 [ngClass]="{ 'span-active': selectedTab === 'tab1' }"
                 style="padding-left: 10px;">{{campaignsCommon.length}}</span></label>
@@ -18,7 +18,7 @@
             name="tabs"
             (change)="onFilterChange($event)"
             />
-        <label for="tab2">My Campaigns
+        <label for="tab2" class="text-font">MY CAMPAIGNS
             <span
                 [ngClass]="{ 'span-active': selectedTab === 'tab2' }"
                 style="padding-left: 10px;">{{campaignsUser.length}}</span></label>
@@ -55,7 +55,7 @@
             <mat-list *ngIf="campaignsCommon.length > 0">
                 <mat-list-item *ngFor="let campaign of pagedItems">
                     <mat-icon mat-list-icon class="campaign-icon">collections_bookmark</mat-icon>
-                    <h4 mat-line class="campaign-name" (click)="openCampaignModal(campaign)">{{ campaign.name }}</h4>
+                    <h4 mat-line class="campaign-name" (click)="openCampaignModal(campaign)">{{ campaign.name | uppercase }}</h4>
                     <p mat-line><span> Campaign ID: </span>{{
                         campaign.campaignId }}</p>
                     <p mat-line><span> Description: </span>{{
@@ -121,7 +121,7 @@
                 </ul>
             </div>
 
-            <p  *ngIf="campaignsCommon.length < 1">
+            <p  *ngIf="campaignsCommon.length < 1" class="text-font">
                 No Campaigns Available
             </p>
         </section>
@@ -150,7 +150,7 @@
                     </div>
                 </form>
                 <div class="col-sm-4 col-md-3 col-lg-2 col-xs-6">
-                    <select class="form-control" (change)="sortBy($event)">
+                    <select class="form-control" (change)="sortBy($event)" style="padding-right: 5px;">
                         <option hidden>Sort By</option>
                         <option *ngFor="let ele of sortByElements" [value]=ele>
                             {{ ele }}</option>
@@ -160,7 +160,7 @@
             <mat-list *ngIf="campaignsUser.length > 0">
                     <mat-list-item *ngFor="let campaign of pagedItems">
                         <mat-icon mat-list-icon class="campaign-icon">collections_bookmark</mat-icon>
-                        <h4 mat-line class="campaign-name" (click)="openCampaignModal(campaign)">{{ campaign.name }}</h4>
+                        <h4 mat-line class="campaign-name" (click)="openCampaignModal(campaign)">{{ campaign.name | uppercase}}</h4>
                         <p mat-line ><span> Campaign ID: </span>{{
                             campaign.campaignId }}</p>
                         <p mat-line><span> Description: </span>{{

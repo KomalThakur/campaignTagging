@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
   .main-card {
-      margin-top: 10px;
+      margin-top: 1px;
   }
 
   .divider {
@@ -9,13 +9,29 @@
   }
 
   .campaign-icon{
-      color: #0087e0;
+      color: #162d9a !important;
+      /* font-family: "SamsungOne",arial;
+      font-weight: bold;
+      font-size: 14px; */
   }
 
   .campaign-name {
-    color: #f77d0e;
+    color: #000;
+    font-family: "SamsungOne",arial;
+    font-weight: bold;
+    font-size: 14px;
     cursor: pointer;
   }
+
+  .campaign-name:hover {
+    color: #162d9a;
+    font-family: "SamsungOne",arial;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
 
   .col-sm-4 {
       padding-left: 0;
@@ -47,10 +63,12 @@ p:not(:last-child) {
 
 main {
   max-width: 100%;
-  padding: 40px;
+  /* padding: 40px; */
   border: 1px solid rgba(0,0,0,.2);
   background: #fff;
   box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  padding-right: 5px;
+  padding-bottom: 10px;
 }
 
 section {
@@ -71,6 +89,9 @@ label {
   text-align: center;
   color: #abc;
   border: 1px solid transparent;
+  font-family: "SamsungOne",arial;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 label:before {
@@ -85,10 +106,13 @@ label:hover {
 }
 
 input:checked + label {
-  color: #0087e0;
+  color: #162d9a;
   border: 1px solid #abc;
-  border-top: 2px solid #0087e0;
+  border-top: 4px solid #162d9a;
   border-bottom: 1px solid #fff;
+  font-family: "SamsungOne",arial;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 #tab1:checked ~ #content1,
@@ -97,7 +121,10 @@ input:checked + label {
 }
 
 .span-active  {
-    color: #f77d0e;
+    color: grey;
+    font-family: "SamsungOne",arial;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .add-on .input-group-btn > .btn {
@@ -112,4 +139,28 @@ input:checked + label {
    -webkit-box-shadow:none; 
    border-color:#cccccc; 
   }
- 
+
+p {
+  font-family: "SamsungOne",arial;
+  font-weight: 700;
+}
+
+.pagination>.active>a, 
+.pagination>.active>a:focus, 
+.pagination>.active>a:hover, 
+.pagination>.active>span, 
+.pagination>.active>span:focus, 
+.pagination>.active>span:hover {
+  background-color: #162d9a;
+  font-family: "SamsungOne",arial;
+  color: #fff;
+}
+
+.pagination>li>a, 
+.pagination>li>span {
+  color: #162d9a;
+}
+
+input, option {
+  font-family: "SamsungOne",arial ;
+}

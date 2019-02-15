@@ -7,7 +7,7 @@
   >
   <form #f1="ngForm" (ngSubmit)="onCampaignAttributeSubmit()">
     <div *ngIf="isCampaignAttributes">
-      <div class="form-group" *ngIf="formFields.name.show">
+      <div class="form-group padding-cls" *ngIf="formFields.name.show">
         <div><label for="name">{{formFields.name.label}}</label></div>
         <mat-form-field class="form-field">
           <input
@@ -24,7 +24,7 @@
           />
         </mat-form-field>
       </div>
-      <div class="form-group" *ngIf="formFields.description.show">
+      <div class="form-group padding-cls" *ngIf="formFields.description.show">
         <div>
           <label for="description" mat-line>{{formFields.description.label}}</label>
         </div>
@@ -44,7 +44,7 @@
           ></textarea>
         </mat-form-field>
       </div>
-      <div class="row">
+      <div class="row padding-cls">
         <div class="col-sm-6 form-group" *ngIf="formFields.category.show">
           <div><label for="campaignCategory">{{formFields.category.label}}</label></div>
           <mat-form-field class="form-field">
@@ -79,7 +79,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="form-group" *ngIf="formFields.product.show">
+      <div class="form-group padding-cls" *ngIf="formFields.product.show">
         <div>
           <label for="productPromoted">{{formFields.product.label}}</label>
         </div>
@@ -123,7 +123,7 @@
           </mat-tree-node>
         </mat-tree>
       </div>
-      <div class="row">
+      <div class="row padding-cls">
         <div class="col-sm-6 form-group" *ngIf="formFields.alwaysOn.show">
           <div><label for="alwaysOn" mat-line>{{formFields.alwaysOn.label}}</label></div>
           <mat-radio-group
@@ -160,7 +160,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
+      <div class="row padding-cls">
         <div class="col-sm-6 form-group" *ngIf="formFields.phase.show">
           <div><label for="phase" mat-line>{{formFields.phase.label}}</label></div>
           <mat-form-field class="form-field">
@@ -195,7 +195,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
+      <div class="row padding-cls">
         <div class="col-sm-6 form-group" *ngIf="formFields.deploymentDate.show">
           <div *ngIf="campaignAttributes.alwaysOn === false">
             <label for="deploymentDate">{{formFields.deploymentDate.label}}</label>
@@ -271,7 +271,7 @@
       >
         <h4 style="color: #0087e0">Creative {{ i + 1 }}</h4>
         <mat-card>
-          <div class="form-group" *ngIf="formFields.creativeVerison.show">
+          <div class="form-group padding-cls" *ngIf="formFields.creativeVerison.show">
             <div><label for="creativeVerison">{{formFields.creativeVerison.label}}</label></div>
             <mat-form-field class="form-field">
               <input
@@ -287,7 +287,7 @@
               />
             </mat-form-field>
           </div>
-          <div class="form-group" *ngIf="formFields.creativeDesc.show">
+          <div class="form-group padding-cls" *ngIf="formFields.creativeDesc.show">
             <div>
               <label for="creativeDescription">{{formFields.creativeDesc.label}}</label>
             </div>
@@ -306,7 +306,7 @@
             </mat-form-field>
           </div>
 
-          <div class="form-group"  *ngIf="formFields.keyVisual.show">
+          <div class="form-group padding-cls"  *ngIf="formFields.keyVisual.show">
             <div><label for="keyVisual">{{formFields.keyVisual.label}}</label></div>
             <mat-form-field class="form-field">
               <mat-select
@@ -321,7 +321,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="form-group" *ngIf="formFields.offer.show">
+          <div class="form-group padding-cls" *ngIf="formFields.offer.show">
             <div><label for="offer">{{formFields.offer.label}}</label></div>
             <mat-form-field class="form-field">
               <input
@@ -335,7 +335,7 @@
               />
             </mat-form-field>
           </div>
-          <div class="form-group" *ngIf="formFields.audienceSegment.show">
+          <div class="form-group padding-cls" *ngIf="formFields.audienceSegment.show">
             <div><label for="audienceSegment">{{formFields.audienceSegment.label}}</label></div>
             <mat-form-field class="form-field">
               <mat-select

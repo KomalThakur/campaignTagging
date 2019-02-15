@@ -1,21 +1,21 @@
-<h1 mat-dialog-title>Campaign Attributes:</h1>
+<h1 mat-dialog-title>CAMPAIGN ATTRIBUTES:</h1>
 <div mat-dialog-content>
-  <div class="row" style="background-color: #F8F8F8">
+  <div class="row" >
     <div class="col-sm-12">
       <p><span> Campaign name: </span>{{ data.name }}</p>
     </div>
   </div>
-  <div class="row" style="background-color: #F8F8F8">
+  <div class="row" >
     <div class="col-sm-12">
       <p><span> Campaign ID: </span>{{ data.campaignId }}</p>
     </div>
   </div>
-  <div class="row" style="background-color: #F8F8F8">
+  <div class="row" >
     <div class="col-sm-12">
       <p><span> Campaign description: </span>{{ data.description }}</p>
     </div>
   </div>
-  <div class="row" style="background-color: #F8F8F8">
+  <div class="row" >
     <div class="col-sm-4">
       <p><span>Creation Date: </span>{{ data.createTimestamp | date }}</p>
     </div>
@@ -26,7 +26,7 @@
       <p><span>Campaign Category: </span>{{ data.campaignCategory }}</p>
     </div>
   </div>
-  <div class="row" style="background-color: #F8F8F8">
+  <div class="row" >
     <div class="col-sm-4">
       <p><span>Phase : </span>{{ data.phase }}</p>
     </div>
@@ -37,7 +37,7 @@
       <p><span>Number of Creatives: </span>{{ data.numOfCreatives }}</p>
     </div>
   </div>
-  <div class="row" style="background-color: #F8F8F8" *ngIf="data.touch">
+  <div class="row"  *ngIf="data.deploymentDate">
     <div class="col-sm-4">
       <p><span>Always On : </span>No</p>
     </div>
@@ -49,14 +49,14 @@
     </div>
   </div>
 
-  <div class="row" style="background-color: #F8F8F8">
+  <div class="row" >
     <div class="col-sm-12">
-      <p style="background-color: #F8F8F8">
+      <p >
         <span> Products Promoted: </span>
       </p>
     </div>
   </div>
-  <div class="row" style="background-color: #F8F8F8">
+  <div class="row" >
     <div class="col-sm-12">
       <ol>
         <li *ngFor="let element of data.product">
@@ -67,11 +67,11 @@
   </div>
 </div>
 
-<h1 mat-dialog-title>Creative Attributes:</h1>
+<h1 mat-dialog-title>CREATIVE ATTRIBUTES:</h1>
 <div mat-dialog-content>
-  <div *ngFor="let attribute of data.creativeAttributes; let i = index">
-    <h4 style="color: #0087e0">Creative {{ i + 1 }}</h4>
-    <div class="row" style="background-color: #F8F8F8">
+  <div *ngFor="let attribute of data.creativeAttributes; let i = index" >
+    <h4>Creative {{ i + 1 }}</h4>
+    <div class="row" >
       <div class="col-sm-12">
         <p>
           <span> Creative description: </span
@@ -81,14 +81,14 @@
     </div>
     <div
       class="row"
-      style="background-color: #F8F8F8"
+      
       *ngIf="data.channel === 'Push Notification'"
     >
       <div class="col-sm-12">
         <p><span> Marketing ID: </span>{{ attribute.marketingId }}</p>
       </div>
     </div>
-    <div class="row" style="background-color: #F8F8F8">
+    <div class="row" >
       <div class="col-sm-4">
         <p><span> Creative version: </span>{{ attribute.creativeVerison }}</p>
       </div>
@@ -99,14 +99,14 @@
         <p><span>Offer: </span>{{ attribute.offer }}</p>
       </div>
     </div>
-    <div class="row" style="background-color: #F8F8F8">
+    <div class="row" >
       <div class="col-sm-12">
-        <p style="background-color: #F8F8F8">
+        <p >
           <span> Audience Segment: </span>
         </p>
       </div>
     </div>
-    <div class="row" style="background-color: #F8F8F8">
+    <div class="row" >
       <div class="col-sm-12">
         <ol>
           <li *ngFor="let segment of attribute.audienceSegment">
