@@ -1,0 +1,15 @@
+<div>
+
+    <h2 mat-dialog-title style="color : #637b9f; font-weight: bolder">
+        CONFIRMATION</h2>
+    <mat-dialog-content style="margin-bottom: 20px;">
+        <p style="font-size: 15px">Are you sure confirm submission?</p>
+        <mat-dialog-actions align="end" style="margin: 0">
+            <button mat-button mat-raised-button style="border: transparent"
+                [mat-dialog-close]="true" (click)= "onCloseClick(false)">Cancel</button>
+            <button mat-button mat-raised-button style="background-color:#162d9a;color: white;"
+                [mat-dialog-close]="ok" (click)= "onCloseClick(true)" cdkFocusInitial>OK</button>
+        </mat-dialog-actions>
+
+    </mat-dialog-content>
+</div>

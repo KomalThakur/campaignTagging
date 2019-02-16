@@ -1,0 +1,412 @@
+<mat-card class="form-card">
+    <mat-card-title *ngIf="isCampaignAttributes === true" class="form-title"
+      >Enter Campaign Attributes</mat-card-title
+    >
+    <mat-card-title *ngIf="isCreativeAttributes === true" class="form-title"
+      >Enter Creative Attributes</mat-card-title
+    >
+    <form #f1="ngForm" (ngSubmit)="onCampaignAttributeSubmit()">
+      <div *ngIf="isCampaignAttributes">
+        <div class="form-group padding-cls" *ngIf="formFields.name.show">
+          <div><label for="name">{{formFields.name.label}}</label></div>
+          <mat-form-field class="form-field">
+            <input
+              matInput
+              placeholder="max 100 chars"
+              type="text"
+              [(ngModel)]="campaignAttributes.name"
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              [required]="formFields.name.isRequired"
+              maxlength="100"
+            />
+          </mat-form-field>
+        </div>
+        <div class="form-group padding-cls" *ngIf="formFields.description.show">
+          <div>
+            <label for="description" mat-line>{{formFields.description.label}}</label>
+          </div>
+          <mat-form-field class="form-field">
+            <textarea
+              matInput
+              placeholder="max 500 chars"
+              type="text"
+              [(ngModel)]="campaignAttributes.description"
+              type=""
+              class="form-control"
+              id="description"
+              name="description"
+              [required]="formFields.description.isRequired"
+              maxlength="500"
+              rows="5"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <div class="row padding-cls">
+          <div class="col-sm-6 form-group" *ngIf="formFields.category.show">
+            <div><label for="campaignCategory">{{formFields.category.label}}</label></div>
+            <mat-form-field class="form-field">
+              <mat-select
+                [(ngModel)]="campaignAttributes.campaignCategory"
+                class="form-control"
+                name="campaignCategory"
+                [required]="formFields.category.isRequired"
+              >
+                <mat-option
+                  *ngFor="let type of campaignCategories"
+                  [value]="type"
+                >
+                  {{ type }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6 form-group" *ngIf="formFields.type.show">
+            <div><label for="product" mat-line>{{formFields.type.label}}</label></div>
+            <mat-form-field class="form-field">
+              <mat-select
+                class="form-control"
+                [required]="formFields.type.isRequired"
+                [(ngModel)]="campaignAttributes.campaignType"
+                name="campaignType"
+              >
+                <mat-option *ngFor="let type of campaignTypes" [value]="type">
+                  {{ type }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="form-group padding-cls" *ngIf="formFields.product.show">
+          <div>
+            <label for="productPromoted">{{formFields.product.label}}</label>
+          </div>
+          <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+            <mat-tree-node
+              *matTreeNodeDef="let node"
+              matTreeNodeToggle
+              matTreeNodePadding
+            >
+              <button mat-icon-button disabled type="button"></button>
+              <mat-checkbox
+                class="checklist-leaf-node"
+                [checked]="checklistSelection.isSelected(node)"
+                (change)="todoLeafItemSelectionToggle(node)"
+                >{{ node.item }}</mat-checkbox
+              >
+            </mat-tree-node>
+  
+            <mat-tree-node
+              *matTreeNodeDef="let node; when: hasChild"
+              matTreeNodePadding
+            >
+              <button
+                mat-icon-button
+                matTreeNodeToggle
+                [attr.aria-label]="'toggle ' + node.filename"
+                type="button"
+              >
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{
+                    treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+                  }}
+                </mat-icon>
+              </button>
+              <mat-checkbox
+                [checked]="descendantsAllSelected(node)"
+                [indeterminate]="descendantsPartiallySelected(node)"
+                (change)="todoItemSelectionToggle(node)"
+                >{{ node.item }}</mat-checkbox
+              >
+            </mat-tree-node>
+          </mat-tree>
+        </div>
+        <div class="row padding-cls">
+          <div class="col-sm-6 form-group" *ngIf="formFields.alwaysOn.show">
+            <div><label for="alwaysOn" mat-line>{{formFields.alwaysOn.label}}</label></div>
+            <mat-radio-group
+              class="example-radio-group"
+              [(ngModel)]="campaignAttributes.alwaysOn"
+              class="form-field"
+              name="alwaysOn"
+              class="form-control"
+              style="margin-top: 20px; border: none"
+            >
+              <mat-radio-button
+                class="example-radio-button"
+                *ngFor="let response of responses"
+                [value]="response.value"
+              >
+                {{ response.label }}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="col-sm-6 form-group" *ngIf="formFields.numOfCreatives.show">
+            <div>
+              <label for="numOfCreatives" mat-line>{{formFields.numOfCreatives.label}}</label>
+            </div>
+            <mat-form-field class="form-field">
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="campaignAttributes.numOfCreatives"
+                class="form-control"
+                id="numOfCreatives"
+                name="numOfCreatives"
+                [required]="formFields.numOfCreatives.isRequired"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row padding-cls">
+          <div class="col-sm-6 form-group" *ngIf="formFields.phase.show">
+            <div><label for="phase" mat-line>{{formFields.phase.label}}</label></div>
+            <mat-form-field class="form-field">
+              <mat-select
+                [(ngModel)]="campaignAttributes.phase"
+                class="form-control"
+                name="phase"
+                [required]="formFields.phase.isRequired"
+              >
+                <mat-option *ngFor="let phase of phases" [value]="phase">
+                  {{ phase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6 form-group" *ngIf="formFields.messageType.show">
+            <div><label for="messageType" mat-line>{{formFields.messageType.label}}</label></div>
+            <mat-form-field class="form-field">
+              <mat-select
+                [(ngModel)]="campaignAttributes.messageType"
+                class="form-control"
+                name="messageType"
+                [required]="formFields.messageType.isRequired"
+              >
+                <mat-option
+                  *ngFor="let messageType of messageTypes"
+                  [value]="messageType"
+                >
+                  {{ messageType }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row padding-cls">
+          <div class="col-sm-6 form-group" *ngIf="formFields.deploymentDate.show">
+            <div *ngIf="campaignAttributes.alwaysOn === false">
+              <label for="deploymentDate">{{formFields.deploymentDate.label}}</label>
+            </div>
+            <mat-form-field
+              class="form-field"
+              *ngIf="campaignAttributes.alwaysOn === false"
+            >
+              <input
+                matInput
+                [matDatepicker]="picker"
+                [(ngModel)]="campaignAttributes.deploymentDate"
+                [required]="formFields.deploymentDate.isRequired"
+                [min]="today"
+                name="deploymentDate"
+                class="form-control"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6 form-group" *ngIf="formFields.touch.show">
+            <div>
+              <label for="touch" *ngIf="campaignAttributes.alwaysOn !== true"
+                >{{formFields.touch.label}}</label
+              >
+            </div>
+            <mat-form-field
+              class="form-field"
+              *ngIf="campaignAttributes.alwaysOn !== true"
+            >
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="campaignAttributes.touch"
+                class="form-control"
+                id="touch"
+                name="touch"
+                [required]="formFields.touch.isRequired"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="next-div">
+          <button
+            mat-raised-button
+            type="submit"
+            style="background-color: #162d9a; color: white"
+            *ngIf="form1.valid && !form1.untouched"
+          >
+            Next<mat-icon>arrow_forward</mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            [disabled]="true"
+            *ngIf="!form1.valid || form1.untouched"
+          >
+            Next<mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </div>
+    </form>
+    <form #f2="ngForm" (ngSubmit)="onCreativeAttributeSubmit()">
+      <div *ngIf="isCreativeAttributes === true">
+        <div
+          *ngFor="
+            let attribute of campaignAttributes.creativeAttributes;
+            let i = index
+          "
+        >
+          <h4 style="color: #162d9a; margin-left: 10px;">Creative {{ i + 1 }}</h4>
+          <mat-card>
+              <div class="row padding-cls">
+                  <div class="form-group col-sm-6" *ngIf="formFields.creativeVerison.show">
+                    <div><label for="creativeVerison">{{formFields.creativeVerison.label}}</label></div>
+                    <mat-form-field class="form-field">
+                      <input
+                        matInput
+                        type="text"
+                        [(ngModel)]="
+                          campaignAttributes.creativeAttributes[i].creativeVerison
+                        "
+                        class="form-control"
+                        id="creativeVerison"
+                        name="creativeVerison-{{ i }}"
+                        [required]="formFields.creativeVerison.isRequired"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div class="form-group col-sm-6" *ngIf="formFields.marketingId.show">
+                    <div>
+                      <label for="marketingId">{{formFields.marketingId.label}}</label>
+                    </div>
+                    <mat-form-field class="form-field">
+                      <input
+                        matInput
+                        type="text"
+                        [(ngModel)]="
+                          campaignAttributes.creativeAttributes[i].marketingId
+                        "
+                        class="form-control"
+                        id="marketingId"
+                        name="marketingId-{{ i }}"
+                        [required]="formFields.marketingId.isRequired"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+            <div class="form-group padding-cls" *ngIf="formFields.creativeDesc.show">
+              <div>
+                <label for="creativeDescription">{{formFields.creativeDesc.label}}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].creativeDescription
+                  "
+                  class="form-control"
+                  id="creativeDescription"
+                  name="creativeDescription-{{ i }}"
+                  [required]="formFields.creativeDesc.isRequired"
+                />
+              </mat-form-field>
+            </div>
+  
+            <div class="form-group padding-cls"  *ngIf="formFields.keyVisual.show">
+              <div><label for="keyVisual">{{formFields.keyVisual.label}}</label></div>
+              <mat-form-field class="form-field">
+                <mat-select
+                  class="form-control"
+                  [required]="formFields.keyVisual.isRequired"
+                  [(ngModel)]="campaignAttributes.creativeAttributes[i].keyVisual"
+                  name="keyVisual"
+                >
+                  <mat-option *ngFor="let type of keyVisuals" [value]="type">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group padding-cls" *ngIf="formFields.offer.show">
+              <div><label for="offer">{{formFields.offer.label}}</label></div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="campaignAttributes.creativeAttributes[i].offer"
+                  class="form-control"
+                  id="offer"
+                  name="offer-{{ i }}"
+                  [required]="formFields.offer.isRequired"
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-group padding-cls" *ngIf="formFields.audienceSegment.show">
+              <div><label for="audienceSegment">{{formFields.audienceSegment.label}}</label></div>
+              <mat-form-field class="form-field">
+                <mat-select
+                  class="form-control"
+                  multiple
+                  [required]="formFields.audienceSegment.isRequired"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].audienceSegment
+                  "
+                  name="audienceSegment-{{ i }}"
+                >
+                  <mat-option
+                    *ngFor="let audienceSegment of audienceSegments"
+                    [value]="audienceSegment"
+                    >{{ audienceSegment }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-card>
+        </div>
+        <div class="next-div">
+          <button
+            mat-raised-button
+            color="accent"
+            style="background-color: #e2e2e2; color: black;"
+            (click)="navigateToCampaignAttributes()"
+          >
+            <mat-icon>arrow_back</mat-icon>Previous
+          </button>
+          &nbsp;&nbsp;
+          <button
+            mat-raised-button
+            type="submit"
+            style="background-color: #162d9a; color: white"
+            *ngIf="form2.valid && !form2.untouched"
+            (click)="onCreativeAttributeSubmit()"
+          >
+            Submit
+          </button>
+          <button
+            mat-raised-button
+            [disabled]="true"
+            *ngIf="!form2.valid || form2.untouched"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+  <div class="loading-indicator" *ngIf="isLoading">
+    <mat-progress-spinner mode="indeterminate" style="color: #162d9a"></mat-progress-spinner>
+  </div>

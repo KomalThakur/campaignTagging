@@ -1,0 +1,131 @@
+.wrap, .login-body, .register-body {
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .wrap {
+    width: 100%;
+    height: 100vh;
+    background: #E0E0E0;
+    display: flex;
+  }
+  
+  .login {
+    width: 500px;
+    background-color: #fff;
+    box-shadow: 0px 2px 5px 1px #7f8c8d;
+  }
+  
+  .toggle-bar {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    border-bottom: grey solid 1px 
+  }
+  .navbar-brand {
+    position: absolute;
+    left: 50%;
+    margin-left: -75px !important;  
+    display: block;
+  }
+
+  mat-divider {
+    color: grey;
+    width: 1px;
+  }
+  .toggle-login, .toggle-register {
+    width: 100%;
+    background:linear-gradient(to bottom,#4359c5 0,#162d9a 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size: 25px;
+    font-family: "SamsungOne",arial;
+  }
+  .toggle-login span, .toggle-register span {
+    color: #fff;
+    text-transform: uppercase;
+    font-family: 'Lato', sans-serif;
+  }
+  .toggle-login:hover, .toggle-register:hover {
+    background-color: #425d78;
+  }
+  
+  .active {
+    background: linear-gradient(to bottom,#4359c5 0,#162d9a 100%);
+  }
+  
+  .login-body, .register-body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: "SamsungOne",arial;
+  }
+  .login-body p, .register-body p {
+    color: #5f5f5f;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-bottom: 8px;
+    font-family: "SamsungOne",arial;
+  }
+  .login-body p:hover, .register-body p:hover {
+    color: #2f2f2f;
+  }
+  
+  .input-section {
+    width: 100%;
+    text-align: center;
+  }
+  .input-section:first-child {
+    margin-top: 20px;
+  }
+  
+  input{
+    width: 280px;
+    padding: 10px 15px;
+    margin-top: 20px;
+  }
+  input.user-input, .btn.user-input {
+    border: 1px solid #ddd;
+    font-size: 20px;
+    font-family: "SamsungOne",arial;
+  }
+  
+  .btn {
+    background: linear-gradient(to bottom,#4359c5 0,#162d9a 100%);
+    color: #fff;
+    border: none;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    font-size: 20px;
+    padding: 10px 15px;
+    width: 280px;
+    margin-left: 20px;
+    font-family: "SamsungOne",arial;
+  }
+  
+  .btn:hover {
+    background: linear-gradient(to bottom,#485285 0,#2b42b4 100%);
+    cursor: pointer;
+  }
+  
+  i {
+    color: #2c3e50;
+    margin-right: 5px;
+  }
+  
+  .user-input:focus {
+    border: 1px solid #aaa;
+  }
+
+  .logo-div {
+    position: absolute;
+  left: 50%;
+  margin-left: -75px !important;  
+  display: block;
+  margin-top: 12px;
+  }

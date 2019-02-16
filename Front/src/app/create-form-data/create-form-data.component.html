@@ -1,0 +1,33 @@
+
+<app-header></app-header>
+<mat-card class="form-card" style="margin: 1px 0 0 0">
+  <div class="form-sub-section">
+    <h4 class="form-title"
+      >PLEASE UPDATE THE FORM DATA :
+  </h4>
+    <mat-form-field class="form-field">
+      <textarea
+        matInput
+        type="text"
+        [(ngModel)]="formData"
+        class="form-control"
+        id="formData"
+        name="formData"
+        rows="40"
+        style="background-color: #f1f1f1;"
+      ></textarea>
+    </mat-form-field>
+    <div align="end" style="padding-bottom: 10px;">
+      <button
+        mat-raised-button
+        style="background-color: #162d9a; color: white"
+        (click)="update()"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+</mat-card>
+<div class="loading-indicator" *ngIf="isLoading">
+  <mat-progress-spinner mode="indeterminate" style="color: #162d9a"></mat-progress-spinner>
+</div>

@@ -1,0 +1,34 @@
+<mat-card class="form-card">
+  <div class="form-sub-section">
+    <h4 class="form-title"
+      >PLEASE SELECT A CAMPAIGN CHANNEL</h4
+    >
+    <mat-form-field class="form-field">
+      <mat-select
+        class="form-control"
+        required
+        [(ngModel)]="channel"
+        name="channel"
+      >
+        <mat-option
+          *ngFor="let channel of campaignChannels"
+          [value]="channel"
+          >{{ channel }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <div align="end" style="padding-bottom: 10px;">
+      <button
+        mat-raised-button
+        style="background-color: #162d9a; color: white"
+        *ngIf="channel !== ''"
+        (click)="navigate()"
+      >
+        Submit
+      </button>
+      <button mat-raised-button [disabled]="true" *ngIf="channel === ''">
+        Submit
+      </button>
+    </div>
+  </div>
+</mat-card>
