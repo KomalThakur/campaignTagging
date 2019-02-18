@@ -28,13 +28,13 @@ async function createCampaign(request) {
 
   item.userId = request.payload._id;
   item.createTimestamp = moment()
-    .tz("America/Los_Angeles")
+    .tz("America/New_York")
     .format();
   item.campaignId = hash(hashObj);
 
   if (body.deploymentDate !== "") {
     item.deploymentDate = moment(body.deploymentDate)
-      .tz("America/Los_Angeles")
+      .tz("America/New_York")
       .format();
       cleanItem = JSON.parse(JSON.stringify(item));
   } else {

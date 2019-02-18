@@ -8,7 +8,7 @@ var errorHandlers = require("./app/errorHandlers");
 var passport = require("passport");
 require("./app/config/passport");
 
-app.set("port", process.env.PORT || 5000);
+app.set("port", process.env.PORT || 3000);
 app.use(cors());
 
 app.use(express.static(__dirname + "/public"));
@@ -28,8 +28,13 @@ app.use(errorHandlers.notFound);
 app.use(errorHandlers.devErrors);
 
 app.listen(app.get("port"), async function() {
-  const mongoDbUrl =
+  let mongoDbUrl = "";
+  if(process.env.MONGODB_URL) {
+    mongoDbUrl = process.env.MONGODB_URL;
+  } else {
+    mongoDbUrl =
     "mongodb://komalthakur:komal123@ds225375.mlab.com:25375/campaign_tagging";
+  }
   try {
     await createMongooseConnectionWithUrl(mongoDbUrl);
     console.log("Node app is running on port", app.get("port"));
