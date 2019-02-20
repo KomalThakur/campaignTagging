@@ -5,7 +5,7 @@ const campaignController = require('./controller');
 
 var jwt = require('express-jwt');
 var auth = jwt({
-  secret: process.env.SECRET_KEY,
+  secret: 'MY_SECRET',
   userProperty: 'payload'
 });
 
