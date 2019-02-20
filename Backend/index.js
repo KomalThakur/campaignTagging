@@ -33,7 +33,7 @@ app.listen(app.get("port"), async function() {
     mongoDbUrl = process.env.MONGODB_URL;
   } else {
     mongoDbUrl =
-    "mongodb://komalthakur:komal123@ds225375.mlab.com:25375/campaign_tagging";
+    "mongodb://localhost:27017/campaign_tagging";
   }
   try {
     await createMongooseConnectionWithUrl(mongoDbUrl);
