@@ -3,7 +3,6 @@ const moment = require("moment");
 const mongoose = require("mongoose");
 
 async function registerUser(item) {
-  console.log(item);
   var user = new UserSchema();
 
   user.name = item.name;

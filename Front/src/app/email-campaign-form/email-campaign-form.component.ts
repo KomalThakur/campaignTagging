@@ -1,4 +1,5 @@
-import { Component, ViewChild, Injectable, OnInit } from "@angular/core";
+import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import * as moment from "moment";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material";
@@ -17,6 +18,15 @@ import {
 } from "../shared/checklist-database.service";
 
 import * as _ from "lodash";
+import { FormControl } from "@angular/forms";
+import {
+  MatAutocompleteSelectedEvent,
+  MatChipInputEvent,
+  MatAutocomplete
+} from "@angular/material";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
+import { CampaignSelectDialogComponent } from "../campaign-select-dialog/campaign-select-dialog.component";
 
 @Component({
   selector: "app-email-campaign-form",
@@ -32,10 +42,28 @@ export class EmailCampaignFormComponent implements OnInit {
   messageTypes = [];
   phases = [];
   audienceSegments = [];
+  audienceSubsegments = [];
   treeData = {};
   keyVisuals = [];
   formFields = {};
   today = moment();
+  pattern = /^[1-9]{1,12}$/;
+  disableAll = false;
+  campaignAttributesTemplate = {
+    channel: "Email",
+    name: "",
+    description: "",
+    campaignType: "",
+    campaignCategory: "",
+    product: [],
+    alwaysOn: false,
+    deploymentDate: "",
+    phase: "",
+    messageType: "",
+    touch: 1,
+    numOfCreatives: "",
+    creativeAttributes: []
+  };
   campaignAttributes = {
     channel: "Email",
     name: "",
@@ -43,11 +71,11 @@ export class EmailCampaignFormComponent implements OnInit {
     campaignType: "",
     campaignCategory: "",
     product: [],
-    alwaysOn: true,
+    alwaysOn: false,
     deploymentDate: "",
     phase: "",
     messageType: "",
-    touch: 0,
+    touch: 1,
     numOfCreatives: "",
     creativeAttributes: []
   };
@@ -57,12 +85,27 @@ export class EmailCampaignFormComponent implements OnInit {
     creativeDescription: "",
     keyVisual: "",
     offer: "",
-    audienceSegment: []
+    audienceSegment: [],
+    audienceSubsegment: []
   };
 
   isCampaignAttributes = true;
   isCreativeAttributes = false;
   isLoading = false;
+
+  // autocomplete
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  audienceSubsegmentCtrl = new FormControl();
+  filteredAudienceSubsegment: Observable<string[]>;
+
+  @ViewChild("audienceSubsegmentInput") fruitInput: ElementRef<
+    HTMLInputElement
+  >;
+  @ViewChild("auto") matAutocomplete: MatAutocomplete;
 
   constructor(
     private router: Router,
@@ -82,9 +125,16 @@ export class EmailCampaignFormComponent implements OnInit {
     this.messageTypes = formData.messageTypes;
     this.phases = formData.phases;
     this.audienceSegments = formData.audienceSegments;
+    this.audienceSubsegments = formData.audienceSubsegments;
     this.keyVisuals = formData.keyVisuals;
     this.responses = formData.responses;
     this.formFields = formData.formFieldsEmail;
+    this.filteredAudienceSubsegment = this.audienceSubsegmentCtrl.valueChanges.pipe(
+      startWith(null),
+      map((fruit: string | null) =>
+        fruit ? this._filter(fruit) : this.audienceSubsegments.slice()
+      )
+    );
   }
 
   initializeTree() {
@@ -117,7 +167,6 @@ export class EmailCampaignFormComponent implements OnInit {
   }
 
   onCampaignAttributeSubmit() {
-    console.log("in this function");
     if (
       this.campaignAttributes.creativeAttributes.length <
       Number(this.campaignAttributes.numOfCreatives)
@@ -151,16 +200,16 @@ export class EmailCampaignFormComponent implements OnInit {
     this.isCampaignAttributes = false;
   }
   onCreativeAttributeSubmit() {
+    this.campaignAttributes.product = this.getSelectedRootNode(
+      this.checklistSelection.selected
+    );
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {}
+      width: "1000px",
+      data: this.campaignAttributes
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        console.log(this.campaignAttributes);
-        this.campaignAttributes.product = this.getSelectedRootNode(
-          this.checklistSelection.selected
-        );
         this.createCampaign();
       }
       this.dialog.closeAll();
@@ -318,5 +367,132 @@ export class EmailCampaignFormComponent implements OnInit {
     });
 
     return returnArray;
+  }
+
+  selectTreeNodes(product) {
+    _.each(product, subsegment => {
+      for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+        if (this.treeControl.dataNodes[i].item == subsegment) {
+          this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
+          this.treeControl.expand(this.treeControl.dataNodes[i]);
+        }
+      }
+    });
+  }
+
+  deSelectTreeNodes() {
+    for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+      this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
+      // this.treeControl.expand(this.treeControl.dataNodes[i]);
+    }
+  }
+
+  async onCampaignTypeChange(event) {
+    if (event.value === "Test Rollout" || event.value === "Remail") {
+      this.isLoading = true;
+      let campaignsCommon = await this.dataStorageService.getAllCampaigns();
+      this.isLoading = false;
+      let newCampaigns = _.filter(campaignsCommon, {
+        campaignType: "New Campaign"
+      });
+      const dialogRef = this.dialog.open(CampaignSelectDialogComponent, {
+        width: "1000px",
+        data: newCampaigns
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          this.campaignAttributes = result;
+          if (_.isNil(this.campaignAttributes.deploymentDate)) {
+            this.campaignAttributes.alwaysOn = true;
+          } else {
+            this.campaignAttributes.alwaysOn = false;
+          }
+          this.campaignAttributes.name =
+            this.campaignAttributes.name + "-" + event.value;
+          this.campaignAttributes.channel = "Email";
+          this.removeMarketingId();
+          this.deSelectTreeNodes();
+          this.selectTreeNodes(this.campaignAttributes.product);
+          this.campaignAttributes.campaignType = event.value;
+          this.disableAll = true;
+        } else {
+          this.campaignAttributes.campaignType = "";
+          this.campaignAttributes = JSON.parse(
+            JSON.stringify(this.campaignAttributesTemplate)
+          );
+          this.deSelectTreeNodes();
+        }
+        this.dialog.closeAll();
+      });
+    } else {
+      this.campaignAttributes = JSON.parse(
+        JSON.stringify(this.campaignAttributesTemplate)
+      );
+      this.campaignAttributes.campaignType = "New Campaign";
+      this.deSelectTreeNodes();
+      this.disableAll = false;
+    }
+  }
+
+  removeMarketingId() {
+    _.each(this.campaignAttributes.creativeAttributes, (attr, index) => {
+      if (attr.marketingId) {
+        this.campaignAttributes.creativeAttributes[index] = _.omit(attr, ["marketingId"]);
+      }
+    });
+  }
+  //chips autocomplete
+
+  add(event: MatChipInputEvent, index): void {
+    // Add fruit only when MatAutocomplete is not open
+    // To make sure this does not conflict with OptionSelected Event
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value;
+
+      // Add our fruit
+      if ((value || "").trim()) {
+        this.campaignAttributes.creativeAttributes[
+          index
+        ].audienceSubsegment.push(value.trim());
+      }
+
+      // Reset the input value
+      if (input) {
+        input.value = "";
+      }
+
+      this.audienceSubsegmentCtrl.setValue(null);
+    }
+  }
+
+  remove(fruit: string, i): void {
+    const index = this.campaignAttributes.creativeAttributes[
+      i
+    ].audienceSubsegment.indexOf(fruit);
+
+    if (index >= 0) {
+      this.campaignAttributes.creativeAttributes[i].audienceSubsegment.splice(
+        index,
+        1
+      );
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent, index): void {
+    this.campaignAttributes.creativeAttributes[index].audienceSubsegment.push(
+      event.option.viewValue
+    );
+    this.fruitInput.nativeElement.value = "";
+    this.audienceSubsegmentCtrl.setValue(null);
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.audienceSubsegments.filter(
+      segment => segment.toLowerCase().indexOf(filterValue) === 0
+    );
   }
 }

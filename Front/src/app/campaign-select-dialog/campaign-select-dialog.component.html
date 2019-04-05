@@ -1,0 +1,63 @@
+<h1 mat-dialog-title>SELECT CAMPAIGN:</h1>
+<div mat-dialog-content>
+  <form role="search">
+    <div class="input-group add-on search-div">
+      <input
+        class="form-control"
+        placeholder="Search..."
+        name="srch-term"
+        id="srch-term"
+        type="text"
+        (input)="onSearchChange($event.target.value)"
+      />
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+          <i class="glyphicon glyphicon-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+  <mat-radio-group [(ngModel)]="campaign" >
+    <mat-radio-button *ngFor="let campaign of data; let i = index" [value]="campaign" style="min-width: 100%">
+      <h4 mat-line class="campaign-name">
+        {{ campaign.name | uppercase }}
+      </h4>
+      <p mat-line><span> Campaign ID: </span>{{ campaign.campaignId }}</p>
+      <p mat-line><span> Description: </span>{{ campaign.description }}</p>
+      <div class="row">
+        <div class="col-sm-4">
+          <p>
+            <span> Created Date: </span>{{ campaign.createTimestamp | date }}
+          </p>
+        </div>
+        <div class="col-sm-4">
+          <p><span>Channel: </span>{{ campaign.channel }}</p>
+        </div>
+        <div class="col-sm-4">
+          <p><span> Campaign Type: </span>{{ campaign.campaignType }}</p>
+        </div>
+      </div>
+      <div class="row" >
+        <div class="col-sm-4">
+          <p><span>Campaign Category: </span>{{ campaign.campaignCategory }}</p>
+        </div>
+        <div class="col-sm-4">
+          <p><span> Phase: </span>{{ campaign.phase }}</p>
+        </div>
+        <div class="col-sm-4">
+          <p>
+            <span> Number of Creatives: </span>{{ campaign.numOfCreatives }}
+          </p>
+        </div>
+      </div>
+      <div style="margin-bottom: 10px;"></div>
+      <mat-divider></mat-divider>
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="campaign" (click)= "onCloseClick('cancel')" style="border: transparent" cdkFocusInitial>Close</button>
+  <button mat-button [mat-dialog-close]= "campaign" (click)= "onCloseClick('submit')" [disabled]="campaign === undefined" style="background-color:#162d9a;color: white;">Submit</button>
+</div>
+

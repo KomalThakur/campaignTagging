@@ -14,6 +14,7 @@ async function getCampaignsByUser(request) {
 
 async function createCampaign(request) {
   let { body } = request;
+  
   let item = JSON.parse(JSON.stringify(body));
   let cleanItem = {};
   let hashObj = {
@@ -21,25 +22,24 @@ async function createCampaign(request) {
     campaignType: body.campaignType,
     product:body.product,
     phase:body.phase,
-    touch:body.touch,
-    audienceSegment:body.audienceSegment
+    touch:body.touch
   };
-  
 
   item.userId = request.payload._id;
   item.createTimestamp = moment()
     .tz("America/New_York")
     .format();
   item.campaignId = hash(hashObj);
-
-  if (body.deploymentDate !== "") {
+  if (!_.isNil(body.deploymentDate) && body.deploymentDate !== "") {
     item.deploymentDate = moment(body.deploymentDate)
       .tz("America/New_York")
       .format();
-      cleanItem = JSON.parse(JSON.stringify(item));
+      let temp = JSON.parse(JSON.stringify(item));
+      cleanItem = _.omit(temp, ["_id"]);
   } else {
-    cleanItem = _.omit(item, ["deploymentDate", "touch"]);
+    cleanItem = _.omit(item, ["deploymentDate", "touch", "_id"]);
   }
+
   return campaignsDao.createCampaign(cleanItem);
 }
 

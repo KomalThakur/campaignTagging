@@ -61,10 +61,6 @@ export class CampaignsComponent implements OnInit {
 
   setPage(page: number,) {
 
-
-    
-    console.log("selected tab ", this.selectedTab);
-
     if (this.selectedTab === "tab1") {
       this.pager = this.pagerService.getPager(
         this.campaignsCommon.length,
@@ -105,7 +101,6 @@ export class CampaignsComponent implements OnInit {
   }
 
   sortBy(event) {
-    console.log(event);
     if (this.selectedTab === "tab1") {
       if (event.target.value === "Creation Date") {
         this.campaignsCommon = _.orderBy(
@@ -114,13 +109,11 @@ export class CampaignsComponent implements OnInit {
           ["desc"]
         );
       } else if (event.target.value === "Deployment Date") {
-        console.log("sort by deployment date");
         this.campaignsCommon = _.orderBy(
           this.campaignsCommon,
           ["deploymentDate"],
           ["desc"]
         );
-        console.log(this.campaignsCommon);
       }
     } else {
       if (event.target.value === "Creation Date") {

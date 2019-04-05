@@ -20,6 +20,7 @@ var campaignSchema = new Schema({
         keyVisual: String,
         offer : String,
         audienceSegment: [String],
+        audienceSubsegment: [String],
         marketingId: String
     }],
     createTimestamp: Date,

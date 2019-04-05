@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import {
@@ -60,6 +60,7 @@ import { ChecklistDatabase } from './shared/checklist-database.service';
 import { CreateFormDataComponent } from './create-form-data/create-form-data.component';
 import { AuthGuardService } from './shared/auth-guard.service';
 import { SearchPipe } from './filters/search.pipe';
+import { CampaignSelectDialogComponent } from './campaign-select-dialog/campaign-select-dialog.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { SearchPipe } from './filters/search.pipe';
     ConfirmationDialogComponent,
     EmailCampaignFormComponent,
     PnCampaignFormComponent,
-    CreateFormDataComponent
+    CreateFormDataComponent,
+    CampaignSelectDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -115,9 +117,10 @@ import { SearchPipe } from './filters/search.pipe';
     MatTreeModule,
     HttpModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [DataStorageService, PagerService, ChecklistDatabase, AuthGuardService, SearchPipe], 
-  bootstrap: [AppComponent, CampaignDialogEmailComponent, ConfirmationDialogComponent]
+  bootstrap: [AppComponent, CampaignDialogEmailComponent, ConfirmationDialogComponent, CampaignSelectDialogComponent]
 })
 export class AppModule { }

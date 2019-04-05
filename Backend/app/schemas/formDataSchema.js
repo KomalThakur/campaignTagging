@@ -14,6 +14,7 @@ var formDataSchema = new Schema({
     messageTypes: [String],
     phases : [String],
     audienceSegments: [String],
+    audienceSubsegments: [String],
     keyVisuals: [String]
 }, {
         collection: 'form_data'

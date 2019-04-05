@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+  .divider {
+      position: relative !important; 
+  }
+
+  .campaign-name {
+    color: #000;
+    font-family: "SamsungOne",arial;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+
+  .col-sm-4 {
+      padding-left: 0;
+  }
+
+  .col-sm-4 > p {
+      margin-bottom: 0;
+  }
+
+span {
+    color: gray;
+}
+
+p {
+  margin: 0;
+}
+
+input {
+  display: none;
+}
+
+label {
+  display: inline-block;
+  margin: 0 0 -1px;
+  padding: 15px 25px;
+  font-weight: 600;
+  text-align: center;
+  color: #abc;
+  border: 1px solid transparent;
+  font-family: "SamsungOne",arial;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+label:before {
+  font-family: fontawesome;
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+label:hover {
+  color: #789;
+  cursor: pointer;
+}
+
+input:checked + label {
+  color: #162d9a;
+  border: 1px solid #abc;
+  border-top: 4px solid #162d9a;
+  border-bottom: 1px solid #fff;
+  font-family: "SamsungOne",arial;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2 {
+  display: block;
+}
+
+.span-active  {
+    color: grey;
+    font-family: "SamsungOne",arial;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.add-on .input-group-btn > .btn {
+    border-left-width:0;left:-2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    padding: 6px 6px 6px 12px;
+  }
+  /* stop the glowing blue shadow */
+  .add-on .form-control:focus {
+   box-shadow:none;
+   -webkit-box-shadow:none; 
+   border-color:#cccccc; 
+  }
+
+p {
+  font-family: "SamsungOne",arial;
+  font-weight: 700;
+}
+
+input, option {
+  font-family: "SamsungOne",arial ;
+}
+
+.col-sm-4 {
+  padding-left: 15px;
+}
+
+::ng-deep .mat-radio-label {
+  min-width: 100%;
+}
+
+::ng-deep .mat-radio-label-content {
+  min-width: 100%;
+}
+
+.search-div {
+  margin-bottom: 10px;
+}

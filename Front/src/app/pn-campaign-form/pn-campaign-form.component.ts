@@ -1,4 +1,5 @@
-import { Component, ViewChild, Injectable } from "@angular/core";
+import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import * as moment from "moment";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material";
@@ -17,6 +18,15 @@ import {
 } from "../shared/checklist-database.service";
 
 import * as _ from "lodash";
+import { FormControl } from "@angular/forms";
+import {
+  MatAutocompleteSelectedEvent,
+  MatChipInputEvent,
+  MatAutocomplete
+} from "@angular/material";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
+import { CampaignSelectDialogComponent } from "../campaign-select-dialog/campaign-select-dialog.component";
 
 @Component({
   selector: "app-pn-campaign-form",
@@ -26,6 +36,7 @@ import * as _ from "lodash";
 export class PnCampaignFormComponent {
   @ViewChild("f1") form1: any;
   @ViewChild("f2") form2: any;
+  campaignsCommon = [];
   campaignCategories = [];
   campaignTypes = [];
   productCategories = [];
@@ -33,10 +44,13 @@ export class PnCampaignFormComponent {
   messageTypes = [];
   phases = [];
   audienceSegments = [];
+  audienceSubsegments = [];
   treeData = {};
   keyVisuals = [];
   formFields = {};
   today = moment();
+  pattern = /^[1-9]{1,12}$/;
+  disableAll = false;
   campaignAttributes = {
     channel: "Push Notification",
     name: "",
@@ -44,11 +58,26 @@ export class PnCampaignFormComponent {
     campaignType: "",
     campaignCategory: "",
     product: [],
-    alwaysOn: true,
+    alwaysOn: false,
     deploymentDate: "",
     phase: "",
     messageType: "",
-    touch: 0,
+    touch: 1,
+    numOfCreatives: "",
+    creativeAttributes: []
+  };
+  campaignAttributesTemplate = {
+    channel: "Push Notification",
+    name: "",
+    description: "",
+    campaignType: "",
+    campaignCategory: "",
+    product: [],
+    alwaysOn: false,
+    deploymentDate: "",
+    phase: "",
+    messageType: "",
+    touch: 1,
     numOfCreatives: "",
     creativeAttributes: []
   };
@@ -59,12 +88,28 @@ export class PnCampaignFormComponent {
     keyVisual: "",
     offer: "",
     audienceSegment: [],
+    audienceSubsegment: [],
     marketingId: ""
   };
 
   isCampaignAttributes = true;
   isCreativeAttributes = false;
   isLoading = false;
+
+  // autocomplete
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  audienceSubsegmentCtrl = new FormControl();
+  filteredAudienceSubsegment: Observable<string[]>;
+  disableMarketingId = false
+
+  @ViewChild("audienceSubsegmentInput") fruitInput: ElementRef<
+    HTMLInputElement
+  >;
+  @ViewChild("auto") matAutocomplete: MatAutocomplete;
 
   constructor(
     private router: Router,
@@ -84,9 +129,17 @@ export class PnCampaignFormComponent {
     this.messageTypes = formData.messageTypes;
     this.phases = formData.phases;
     this.audienceSegments = formData.audienceSegments;
+    this.audienceSubsegments = formData.audienceSubsegments;
     this.keyVisuals = formData.keyVisuals;
     this.responses = formData.responses;
     this.formFields = formData.formFieldsPn;
+
+    this.filteredAudienceSubsegment = this.audienceSubsegmentCtrl.valueChanges.pipe(
+      startWith(null),
+      map((fruit: string | null) =>
+        fruit ? this._filter(fruit) : this.audienceSubsegments.slice()
+      )
+    );
   }
 
   initializeTree() {
@@ -151,18 +204,17 @@ export class PnCampaignFormComponent {
     this.isCampaignAttributes = false;
   }
   onCreativeAttributeSubmit() {
+    this.campaignAttributes.product = this.getSelectedRootNode(
+      this.checklistSelection.selected
+    );
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {}
+      width: "1000px",
+      data: this.campaignAttributes
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log("------------------------result-------------", result);
       if (result === true) {
         console.log(this.campaignAttributes);
-        this.campaignAttributes.product = this.getSelectedRootNode(
-          this.checklistSelection.selected
-        );
-
         this.createCampaign();
       }
 
@@ -321,5 +373,142 @@ export class PnCampaignFormComponent {
     });
 
     return returnArray;
+  }
+
+  selectTreeNodes(product) {
+    console.log("selectTreeNodes : ", product);
+    _.each(product, subsegment => {
+      for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+        if (this.treeControl.dataNodes[i].item == subsegment) {
+          console.log("subsegment found : ", subsegment);
+          this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
+          this.treeControl.expand(this.treeControl.dataNodes[i]);
+        }
+      }
+    });
+  }
+
+  deSelectTreeNodes() {
+    for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+      this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
+      //  this.treeControl.expand(this.treeControl.dataNodes[i]);
+    }
+  }
+
+  async onCampaignTypeChange(event) {
+    if (event.value === "Test Rollout" || event.value === "Remail") {
+      this.isLoading = true;
+      let campaignsCommon = await this.dataStorageService.getAllCampaigns();
+      this.isLoading = false;
+      let newCampaigns = _.filter(campaignsCommon, {
+        campaignType: "New Campaign"
+      });
+      const dialogRef = this.dialog.open(CampaignSelectDialogComponent, {
+        width: "1000px",
+        data: newCampaigns
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          console.log("result : ", result);
+          this.campaignAttributes = result;
+          if (_.isNil(this.campaignAttributes.deploymentDate)) {
+            this.campaignAttributes.alwaysOn = true;
+          } else {
+            this.campaignAttributes.alwaysOn = false;
+          }
+          this.campaignAttributes.name =
+            this.campaignAttributes.name + "-" + event.value;
+          if(this.campaignAttributes.channel !==  "Push Notification") {
+            this.campaignAttributes.channel = "Push Notification";
+          } else {
+            this.disableMarketingId = true;
+          }
+         
+          this.addMarketingId(result);
+          this.deSelectTreeNodes();
+          this.selectTreeNodes(this.campaignAttributes.product);
+          this.campaignAttributes.campaignType = event.value;
+          this.disableAll = true;
+        } else {
+          this.campaignAttributes.campaignType = "";
+          this.campaignAttributes = JSON.parse(
+            JSON.stringify(this.campaignAttributesTemplate)
+          );
+          this.deSelectTreeNodes()
+        }
+        this.dialog.closeAll();
+      });
+    } else {
+      this.campaignAttributes = JSON.parse(
+        JSON.stringify(this.campaignAttributesTemplate)
+      );
+      this.campaignAttributes.campaignType = "New Campaign";
+      this.deSelectTreeNodes();
+      this.disableAll = false;
+      this.disableMarketingId = false;
+    }
+  }
+
+  addMarketingId(result) {
+    _.each(this.campaignAttributes.creativeAttributes, (attr, index) => {
+      if (_.isNil(attr.marketingId) || _.isEmpty(attr.marketingId)) {
+        this.campaignAttributes.creativeAttributes[index].marketingId = "";
+      }
+    });
+  }
+
+  //chips autocomplete
+
+  add(event: MatChipInputEvent, index): void {
+    // Add fruit only when MatAutocomplete is not open
+    // To make sure this does not conflict with OptionSelected Event
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value;
+
+      // Add our fruit
+      if ((value || "").trim()) {
+        this.campaignAttributes.creativeAttributes[
+          index
+        ].audienceSubsegment.push(value.trim());
+      }
+
+      // Reset the input value
+      if (input) {
+        input.value = "";
+      }
+
+      this.audienceSubsegmentCtrl.setValue(null);
+    }
+  }
+
+  remove(fruit: string, i): void {
+    const index = this.campaignAttributes.creativeAttributes[
+      i
+    ].audienceSubsegment.indexOf(fruit);
+
+    if (index >= 0) {
+      this.campaignAttributes.creativeAttributes[i].audienceSubsegment.splice(
+        index,
+        1
+      );
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent, index): void {
+    this.campaignAttributes.creativeAttributes[index].audienceSubsegment.push(
+      event.option.viewValue
+    );
+    this.fruitInput.nativeElement.value = "";
+    this.audienceSubsegmentCtrl.setValue(null);
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.audienceSubsegments.filter(
+      segment => segment.toLowerCase().indexOf(filterValue) === 0
+    );
   }
 }

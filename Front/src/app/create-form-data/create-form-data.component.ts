@@ -28,14 +28,12 @@ export class CreateFormDataComponent{
   async update() {
     try {
       let data = JSON.parse(this.formData)
-      console.log(data);
       this.isLoading  = true;
       await this.dataStorageService.updateFormData(data);
       this.isLoading = false;
       alert("data updated");
     } catch(e) {
       this.isLoading = false;
-      console.log(e);
       alert(" JSON parsing error, please check the data again.");
     }
     

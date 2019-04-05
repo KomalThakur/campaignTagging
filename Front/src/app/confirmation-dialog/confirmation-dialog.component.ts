@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-confirmation-dialog',
@@ -7,6 +8,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./confirmation-dialog.component.css']
 })
 export class ConfirmationDialogComponent implements OnInit {
+
+  today = moment();
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
