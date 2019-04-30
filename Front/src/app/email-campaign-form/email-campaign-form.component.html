@@ -359,7 +359,47 @@
               />
             </mat-form-field>
           </div>
-
+          <div
+            class="form-group padding-cls"
+            *ngIf="formFields.subjectLine.show"
+          >
+            <div>
+              <label for="subjectLine">{{
+                formFields.subjectLine.label
+              }}</label>
+            </div>
+            <mat-form-field class="form-field">
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="
+                  campaignAttributes.creativeAttributes[i].subjectLine
+                "
+                class="form-control"
+                id="subjectLine"
+                [disabled]="disableAll"
+                name="subjectLine-{{ i }}"
+                [required]="formFields.subjectLine.isRequired"
+              />
+            </mat-form-field>
+          </div>
+          <div class="form-group padding-cls" *ngIf="formFields.preHeader.show">
+            <div>
+              <label for="preHeader">{{ formFields.preHeader.label }}</label>
+            </div>
+            <mat-form-field class="form-field">
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="campaignAttributes.creativeAttributes[i].preHeader"
+                class="form-control"
+                id="preHeader"
+                [disabled]="disableAll"
+                name="preHeader-{{ i }}"
+                [required]="formFields.preHeader.isRequired"
+              />
+            </mat-form-field>
+          </div>
           <div class="form-group padding-cls" *ngIf="formFields.keyVisual.show">
             <div>
               <label for="keyVisual">{{ formFields.keyVisual.label }}</label>
@@ -462,7 +502,7 @@
                 (optionSelected)="selected($event, i)"
               >
                 <mat-option
-                  *ngFor="let segment of (filteredAudienceSubsegment | async)"
+                  *ngFor="let segment of filteredAudienceSubsegment | async"
                   [value]="segment"
                 >
                   {{ segment }}

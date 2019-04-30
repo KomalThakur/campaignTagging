@@ -87,6 +87,8 @@ export class PnCampaignFormComponent {
     creativeDescription: "",
     keyVisual: "",
     offer: "",
+    preHeader:"",
+    subjectLine: "",
     audienceSegment: [],
     audienceSubsegment: [],
     marketingId: ""

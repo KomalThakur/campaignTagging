@@ -85,6 +85,8 @@ export class EmailCampaignFormComponent implements OnInit {
     creativeDescription: "",
     keyVisual: "",
     offer: "",
+    preHeader:"",
+    subjectLine: "",
     audienceSegment: [],
     audienceSubsegment: []
   };

@@ -21,7 +21,9 @@ var campaignSchema = new Schema({
         offer : String,
         audienceSegment: [String],
         audienceSubsegment: [String],
-        marketingId: String
+        marketingId: String,
+        preHeader: String,
+        subjectLine: String
     }],
     createTimestamp: Date,
     userId: String,
