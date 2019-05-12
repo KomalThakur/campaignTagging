@@ -27,6 +27,7 @@ var campaignSchema = new Schema({
     }],
     createTimestamp: Date,
     userId: String,
+    userEmail: String,
     campaignId: {
         type:String,
         unique: true

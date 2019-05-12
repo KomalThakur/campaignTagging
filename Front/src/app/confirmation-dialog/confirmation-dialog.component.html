@@ -134,12 +134,12 @@
       </div>
       <div class="row">
         <div class="col-sm-4">
-          <p>
+          <p *ngIf="attribute.audienceSegment.length > 0">
             Audience Segment:
           </p>
         </div>
         <div class="col-sm-4">
-          <p>
+          <p *ngIf="attribute.audienceSubsegment.length > 0">
             Audience Subsegment:
           </p>
         </div>
@@ -147,14 +147,14 @@
       </div>
       <div class="row">
         <div class="col-sm-4">
-          <ol>
+          <ol *ngIf="attribute.audienceSegment.length > 0">
             <li *ngFor="let segment of attribute.audienceSegment">
               {{ segment }}
             </li>
           </ol>
         </div>
         <div class="col-sm-4">
-          <ol>
+          <ol *ngIf="attribute.audienceSubsegment.length > 0">
             <li *ngFor="let segment of attribute.audienceSubsegment">
               {{ segment }}
             </li>

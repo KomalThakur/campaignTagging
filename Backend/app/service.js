@@ -26,6 +26,8 @@ async function createCampaign(request) {
   };
 
   item.userId = request.payload._id;
+  let user = await userDao.getUserProfile(request);
+  item.userEmail = user.email;
   item.createTimestamp = moment()
     .tz("America/New_York")
     .format();
