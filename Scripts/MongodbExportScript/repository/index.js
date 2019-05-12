@@ -1,0 +1,1 @@
+module.exports.campaignsDao = require('./campaigns');
