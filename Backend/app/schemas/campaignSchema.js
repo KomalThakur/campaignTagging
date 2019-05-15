@@ -15,7 +15,7 @@ var campaignSchema = new Schema({
     touch: Number,
     numOfCreatives: Number,
     creativeAttributes : [ {
-        creativeVerison : String,
+        creativeVersion : String,
         creativeDescription : String,
         keyVisual: String,
         offer : String,

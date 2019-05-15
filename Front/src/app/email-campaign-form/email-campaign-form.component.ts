@@ -81,11 +81,11 @@ export class EmailCampaignFormComponent implements OnInit {
   };
 
   creativeAttributesTemplate = {
-    creativeVerison: "",
+    creativeVersion: "",
     creativeDescription: "",
     keyVisual: "",
     offer: "",
-    preHeader:"",
+    preHeader: "",
     subjectLine: "",
     audienceSegment: [],
     audienceSubsegment: []
@@ -127,7 +127,7 @@ export class EmailCampaignFormComponent implements OnInit {
     this.messageTypes = formData.messageTypes;
     this.phases = formData.phases;
     this.audienceSegments = formData.audienceSegments;
-    this.audienceSubsegments = formData.audienceSubsegments;
+    //    this.audienceSubsegments = formData.audienceSubsegments;
     this.keyVisuals = formData.keyVisuals;
     this.responses = formData.responses;
     this.formFields = formData.formFieldsEmail;
@@ -166,6 +166,11 @@ export class EmailCampaignFormComponent implements OnInit {
   navigateToCampaignAttributes() {
     this.isCampaignAttributes = true;
     this.isCreativeAttributes = false;
+  }
+
+  removeSubsegments(index) {
+    this.campaignAttributes.creativeAttributes[index].audienceSubsegment = [];
+    this.audienceSubsegmentCtrl.setValue("abd");
   }
 
   onCampaignAttributeSubmit() {
@@ -389,6 +394,19 @@ export class EmailCampaignFormComponent implements OnInit {
     }
   }
 
+  addSubsegment(index) {
+    let currentAS = this.campaignAttributes.creativeAttributes[index]
+      .audienceSegment;
+    this.audienceSubsegments = [];
+    _.each(this.audienceSegments, seg => {
+      if (currentAS.indexOf(seg.segment) >= 0) {
+        if (seg.subsegment.length > 0) {
+          this.audienceSubsegments = this.audienceSubsegments.concat(seg.subsegment);
+        }
+      }
+    });
+  }
+
   async onCampaignTypeChange(event) {
     if (event.value === "Test Rollout" || event.value === "Remail") {
       this.isLoading = true;
@@ -440,7 +458,9 @@ export class EmailCampaignFormComponent implements OnInit {
   removeMarketingId() {
     _.each(this.campaignAttributes.creativeAttributes, (attr, index) => {
       if (attr.marketingId) {
-        this.campaignAttributes.creativeAttributes[index] = _.omit(attr, ["marketingId"]);
+        this.campaignAttributes.creativeAttributes[index] = _.omit(attr, [
+          "marketingId"
+        ]);
       }
     });
   }

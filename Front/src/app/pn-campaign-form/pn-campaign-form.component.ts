@@ -83,11 +83,11 @@ export class PnCampaignFormComponent {
   };
 
   creativeAttributesTemplate = {
-    creativeVerison: "",
+    creativeVersion: "",
     creativeDescription: "",
     keyVisual: "",
     offer: "",
-    preHeader:"",
+    preHeader: "",
     subjectLine: "",
     audienceSegment: [],
     audienceSubsegment: [],
@@ -106,7 +106,7 @@ export class PnCampaignFormComponent {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   audienceSubsegmentCtrl = new FormControl();
   filteredAudienceSubsegment: Observable<string[]>;
-  disableMarketingId = false
+  disableMarketingId = false;
 
   @ViewChild("audienceSubsegmentInput") fruitInput: ElementRef<
     HTMLInputElement
@@ -131,7 +131,7 @@ export class PnCampaignFormComponent {
     this.messageTypes = formData.messageTypes;
     this.phases = formData.phases;
     this.audienceSegments = formData.audienceSegments;
-    this.audienceSubsegments = formData.audienceSubsegments;
+    // this.audienceSubsegments = formData.audienceSubsegments;
     this.keyVisuals = formData.keyVisuals;
     this.responses = formData.responses;
     this.formFields = formData.formFieldsPn;
@@ -169,6 +169,25 @@ export class PnCampaignFormComponent {
   navigateToCampaignAttributes() {
     this.isCampaignAttributes = true;
     this.isCreativeAttributes = false;
+  }
+
+  removeSubsegments(index) {
+    this.campaignAttributes.creativeAttributes[index].audienceSubsegment = [];
+    this.audienceSubsegmentCtrl.setValue("abd");
+  }
+  addSubsegment(index) {
+    let currentAS = this.campaignAttributes.creativeAttributes[index]
+      .audienceSegment;
+    this.audienceSubsegments = [];
+    _.each(this.audienceSegments, seg => {
+      if (currentAS.indexOf(seg.segment) >= 0) {
+        if (seg.subsegment.length > 0) {
+          this.audienceSubsegments = this.audienceSubsegments.concat(
+            seg.subsegment
+          );
+        }
+      }
+    });
   }
 
   onCampaignAttributeSubmit() {
@@ -421,12 +440,12 @@ export class PnCampaignFormComponent {
           }
           this.campaignAttributes.name =
             this.campaignAttributes.name + "-" + event.value;
-          if(this.campaignAttributes.channel !==  "Push Notification") {
+          if (this.campaignAttributes.channel !== "Push Notification") {
             this.campaignAttributes.channel = "Push Notification";
           } else {
             this.disableMarketingId = true;
           }
-         
+
           this.addMarketingId(result);
           this.deSelectTreeNodes();
           this.selectTreeNodes(this.campaignAttributes.product);
@@ -437,7 +456,7 @@ export class PnCampaignFormComponent {
           this.campaignAttributes = JSON.parse(
             JSON.stringify(this.campaignAttributesTemplate)
           );
-          this.deSelectTreeNodes()
+          this.deSelectTreeNodes();
         }
         this.dialog.closeAll();
       });

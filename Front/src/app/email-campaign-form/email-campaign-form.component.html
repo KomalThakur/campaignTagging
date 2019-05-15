@@ -313,11 +313,11 @@
         <mat-card>
           <div
             class="form-group padding-cls"
-            *ngIf="formFields.creativeVerison.show"
+            *ngIf="formFields.creativeVersion.show"
           >
             <div>
-              <label for="creativeVerison">{{
-                formFields.creativeVerison.label
+              <label for="creativeVersion">{{
+                formFields.creativeVersion.label
               }}</label>
             </div>
             <mat-form-field class="form-field">
@@ -325,13 +325,13 @@
                 matInput
                 type="text"
                 [(ngModel)]="
-                  campaignAttributes.creativeAttributes[i].creativeVerison
+                  campaignAttributes.creativeAttributes[i].creativeVersion
                 "
                 class="form-control"
-                id="creativeVerison"
+                id="creativeVersion"
                 [disabled]="disableAll"
-                name="creativeVerison-{{ i }}"
-                [required]="formFields.creativeVerison.isRequired"
+                name="creativeVersion-{{ i }}"
+                [required]="formFields.creativeVersion.isRequired"
               />
             </mat-form-field>
           </div>
@@ -454,18 +454,19 @@
                 "
                 name="audienceSegment-{{ i }}"
                 [disabled]="disableAll"
+                (focus) = "removeSubsegments(i)"
               >
                 <mat-option
                   *ngFor="let audienceSegment of audienceSegments"
-                  [value]="audienceSegment"
-                  >{{ audienceSegment }}</mat-option
+                  [value]="audienceSegment.segment"
+                  >{{ audienceSegment.segment }}</mat-option
                 >
               </mat-select>
             </mat-form-field>
           </div>
           <div
             class="form-group padding-cls"
-            *ngIf="formFields.audienceSubsegment.show"
+            *ngIf="formFields.audienceSubsegment.show && campaignAttributes.creativeAttributes[i].audienceSegment.length > 0"
           >
             <div>
               <label for="audienceSubsegment">{{
@@ -495,6 +496,7 @@
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   [matChipInputAddOnBlur]="addOnBlur"
                   (matChipInputTokenEnd)="add($event, i)"
+                  (focus)="addSubsegment(i)"
                 />
               </mat-chip-list>
               <mat-autocomplete
