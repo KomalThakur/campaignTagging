@@ -409,14 +409,46 @@ export class PnCampaignFormComponent {
     });
   }
 
+  checkAllParentsSelectionDeselect(node: TodoItemFlatNode): void {
+    let parent: TodoItemFlatNode | null = this.getParentNode(node);
+    while (parent) {
+      this.checkRootNodeSelectionDeselect(parent);
+      parent = this.getParentNode(parent);
+    }
+  }
+
+  checkRootNodeSelectionDeselect(node: TodoItemFlatNode): void {
+    const nodeSelected = this.checklistSelection.isSelected(node);
+    const descendants = this.treeControl.getDescendants(node);
+    const descAllSelected = descendants.every(child =>
+      this.checklistSelection.isSelected(child)
+    );
+    if (nodeSelected && !descAllSelected) {
+      this.checklistSelection.deselect(node);
+    } 
+  }
+  
+  todoItemSelectionDeselect(node: TodoItemFlatNode): void {
+    this.checklistSelection.deselect(node);
+    const descendants = this.treeControl.getDescendants(node);
+    if(this.checklistSelection.isSelected(node)) {
+      this.checklistSelection.deselect(...descendants);
+    }
+  
+    // Force update for the parent
+    descendants.every(child => this.checklistSelection.isSelected(child));
+    this.checkAllParentsSelectionDeselect(node);
+  }
+
   deSelectTreeNodes() {
     for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
-      this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
-      //  this.treeControl.expand(this.treeControl.dataNodes[i]);
+      this.todoItemSelectionDeselect(this.treeControl.dataNodes[i]);
+      // this.treeControl.expand(this.treeControl.dataNodes[i]);
     }
   }
 
   async onCampaignTypeChange(event) {
+    this.deSelectTreeNodes();
     if (event.value === "Test Rollout" || event.value === "Remail") {
       this.isLoading = true;
       let campaignsCommon = await this.dataStorageService.getAllCampaigns();

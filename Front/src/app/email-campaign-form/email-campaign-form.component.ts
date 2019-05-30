@@ -316,6 +316,17 @@ export class EmailCampaignFormComponent implements OnInit {
     this.checkAllParentsSelection(node);
   }
 
+  todoItemSelectionDeselect(node: TodoItemFlatNode): void {
+    this.checklistSelection.deselect(node);
+    const descendants = this.treeControl.getDescendants(node);
+    if(this.checklistSelection.isSelected(node)) {
+      this.checklistSelection.deselect(...descendants);
+    }
+  
+    // Force update for the parent
+    descendants.every(child => this.checklistSelection.isSelected(child));
+    this.checkAllParentsSelectionDeselect(node);
+  }
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
   todoLeafItemSelectionToggle(node: TodoItemFlatNode): void {
     this.checklistSelection.toggle(node);
@@ -327,6 +338,14 @@ export class EmailCampaignFormComponent implements OnInit {
     let parent: TodoItemFlatNode | null = this.getParentNode(node);
     while (parent) {
       this.checkRootNodeSelection(parent);
+      parent = this.getParentNode(parent);
+    }
+  }
+
+  checkAllParentsSelectionDeselect(node: TodoItemFlatNode): void {
+    let parent: TodoItemFlatNode | null = this.getParentNode(node);
+    while (parent) {
+      this.checkRootNodeSelectionDeselect(parent);
       parent = this.getParentNode(parent);
     }
   }
@@ -343,6 +362,18 @@ export class EmailCampaignFormComponent implements OnInit {
     } else if (!nodeSelected && descAllSelected) {
       this.checklistSelection.select(node);
     }
+  }
+
+   /** Check root node checked state and change it accordingly */
+   checkRootNodeSelectionDeselect(node: TodoItemFlatNode): void {
+    const nodeSelected = this.checklistSelection.isSelected(node);
+    const descendants = this.treeControl.getDescendants(node);
+    const descAllSelected = descendants.every(child =>
+      this.checklistSelection.isSelected(child)
+    );
+    if (nodeSelected && !descAllSelected) {
+      this.checklistSelection.deselect(node);
+    } 
   }
 
   /* Get the parent node of a node */
@@ -377,9 +408,11 @@ export class EmailCampaignFormComponent implements OnInit {
   }
 
   selectTreeNodes(product) {
+    console.log(product);
+    console.log(this.treeControl.dataNodes);
     _.each(product, subsegment => {
       for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
-        if (this.treeControl.dataNodes[i].item == subsegment) {
+        if (this.treeControl.dataNodes[i].item === subsegment) {
           this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
           this.treeControl.expand(this.treeControl.dataNodes[i]);
         }
@@ -389,7 +422,7 @@ export class EmailCampaignFormComponent implements OnInit {
 
   deSelectTreeNodes() {
     for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
-      this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
+      this.todoItemSelectionDeselect(this.treeControl.dataNodes[i]);
       // this.treeControl.expand(this.treeControl.dataNodes[i]);
     }
   }
@@ -408,6 +441,7 @@ export class EmailCampaignFormComponent implements OnInit {
   }
 
   async onCampaignTypeChange(event) {
+    this.deSelectTreeNodes();
     if (event.value === "Test Rollout" || event.value === "Remail") {
       this.isLoading = true;
       let campaignsCommon = await this.dataStorageService.getAllCampaigns();
@@ -431,6 +465,8 @@ export class EmailCampaignFormComponent implements OnInit {
           this.campaignAttributes.name =
             this.campaignAttributes.name + "-" + event.value;
           this.campaignAttributes.channel = "Email";
+          console.log("Campaign type : ", event.value);
+          console.log("Products selected : ", this.campaignAttributes.product)
           this.removeMarketingId();
           this.deSelectTreeNodes();
           this.selectTreeNodes(this.campaignAttributes.product);
