@@ -14,6 +14,7 @@ router.get('/campaign/user', auth, campaignController.getCampaignsByUser);
 router.get('/campaign', auth, campaignController.getAllCampaigns);
 router.get('/data', auth, campaignController.getFormData);
 router.post('/data', auth, campaignController.createFormData);
+router.post('/target', campaignController.getTargetData);
 
 
 /*------------------ Auth api------------------*/

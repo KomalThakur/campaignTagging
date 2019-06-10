@@ -170,6 +170,21 @@ async function getUserProfile(req, res, next) {
   }
 }
 
+getTargetData
+
+async function getTargetData(req, res, next) {
+    try {
+      let data = await campaignService.getTargetData(req);
+      res.status(200);
+      res.send({
+        data ,
+        status : 200,
+        message : "Success"});
+    } catch (error) {
+      next(error);
+    }
+}
+
 module.exports = {
   getAllCampaigns,
   getCampaignsByUser,
@@ -178,5 +193,6 @@ module.exports = {
   createFormData,
   registerUser,
   loginUser,
-  getUserProfile
+  getUserProfile,
+  getTargetData
 };

@@ -157,6 +157,25 @@ export class DataStorageService {
       });
   }
 
+  getTargetAudience(data) {
+    console.log("inside get target audience");
+    return this.http
+      .post(this.baseUrl + "target", {audienceSegment : data}, {
+        headers: new Headers({
+          "Content-Type": "application/json",
+        })
+      })
+      .toPromise()
+      .then(res => {
+        let jsonResp = res.json();
+        return jsonResp.data.value;
+      })
+      .catch(err => {
+        console.log(err.json());
+        throw err.json();
+      });
+  }
+
   logout() {
     this.token = "";
     window.localStorage.removeItem("mean-token");

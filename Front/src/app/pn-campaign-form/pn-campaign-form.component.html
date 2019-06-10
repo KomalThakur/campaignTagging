@@ -488,6 +488,7 @@
                 name="audienceSegment-{{ i }}"
                 [disabled]="disableAll"
                 (focus)="removeSubsegments(i)"
+                (selectionChange)="showTargetAudience(i)"
               >
                 <mat-option
                   *ngFor="let audienceSegment of audienceSegments"
@@ -496,6 +497,12 @@
                 >
               </mat-select>
             </mat-form-field>
+            <div *ngIf="campaignAttributes.creativeAttributes[i].showTarget">
+              <label for="target" class="target-div">
+                Your Customer reach is
+                {{ campaignAttributes.creativeAttributes[i].targetValue }}
+              </label>
+            </div>
           </div>
           <div
             class="form-group padding-cls"

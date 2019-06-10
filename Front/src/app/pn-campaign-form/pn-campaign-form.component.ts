@@ -91,7 +91,9 @@ export class PnCampaignFormComponent {
     subjectLine: "",
     audienceSegment: [],
     audienceSubsegment: [],
-    marketingId: ""
+    marketingId: "",
+    showTarget: false,
+    targetValue: 0
   };
 
   isCampaignAttributes = true;
@@ -563,5 +565,14 @@ export class PnCampaignFormComponent {
     return this.audienceSubsegments.filter(
       segment => segment.toLowerCase().indexOf(filterValue) === 0
     );
+  }
+
+  async showTargetAudience(index) {
+    if(this.campaignAttributes.creativeAttributes[index].audienceSegment.length !== 0) {
+      this.campaignAttributes.creativeAttributes[index].targetValue = await this.dataStorageService.getTargetAudience(this.campaignAttributes.creativeAttributes[index].audienceSegment);
+      this.campaignAttributes.creativeAttributes[index].showTarget = true;
+    } else {
+      this.campaignAttributes.creativeAttributes[index].showTarget = false;
+    }
   }
 }

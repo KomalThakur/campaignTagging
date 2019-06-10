@@ -1,6 +1,11 @@
 const _ = require("lodash");
 var moment = require("moment-timezone");
-const { campaignsDao, formDataDao, userDao } = require("./repository");
+const {
+  campaignsDao,
+  formDataDao,
+  userDao,
+  targetDao
+} = require("./repository");
 var hash = require("object-hash");
 
 function getAllCampaigns(request) {
@@ -14,15 +19,15 @@ async function getCampaignsByUser(request) {
 
 async function createCampaign(request) {
   let { body } = request;
-  
+
   let item = JSON.parse(JSON.stringify(body));
   let cleanItem = {};
   let hashObj = {
     channel: body.channel,
     campaignType: body.campaignType,
-    product:body.product,
-    phase:body.phase,
-    touch:body.touch
+    product: body.product,
+    phase: body.phase,
+    touch: body.touch
   };
 
   item.userId = request.payload._id;
@@ -36,8 +41,8 @@ async function createCampaign(request) {
     item.deploymentDate = moment(body.deploymentDate)
       .tz("America/New_York")
       .format();
-      let temp = JSON.parse(JSON.stringify(item));
-      cleanItem = _.omit(temp, ["_id"]);
+    let temp = JSON.parse(JSON.stringify(item));
+    cleanItem = _.omit(temp, ["_id"]);
   } else {
     cleanItem = _.omit(item, ["deploymentDate", "touch", "_id"]);
   }
@@ -57,9 +62,26 @@ function registerUser(request) {
   return userDao.registerUser(request.body);
 }
 
-
 function getUserProfile(request) {
   return userDao.getUserProfile(request);
+}
+
+async function getTargetData(request) {
+  try {
+    let dataArray = await targetDao.getSpecificTargets(request.body.audienceSegment);
+    let total = 0;
+    if (!_.isNil(dataArray) && dataArray.length !== 0) {
+      _.each(dataArray, ele => {
+        total = total + ele.value;
+      });
+    }
+
+    return {
+      value: total
+    };
+  } catch (e) {
+    throw e;
+  }
 }
 
 module.exports = {
@@ -69,5 +91,6 @@ module.exports = {
   getFormData,
   createFormData,
   registerUser,
-  getUserProfile
+  getUserProfile,
+  getTargetData
 };
