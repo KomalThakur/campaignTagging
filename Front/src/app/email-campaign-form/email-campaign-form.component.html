@@ -8,23 +8,25 @@
   >
   <form #f1="ngForm" (ngSubmit)="onCampaignAttributeSubmit()">
     <div *ngIf="isCampaignAttributes">
-      <div class="form-group padding-cls" *ngIf="formFields.type.show">
-        <div>
-          <label for="product" mat-line>{{ formFields.type.label }}</label>
+      <div class="row padding-cls">
+        <div class="form-group col-sm-6" *ngIf="formFields.type.show">
+          <div>
+            <label for="type" mat-line>{{ formFields.type.label }}</label>
+          </div>
+          <mat-form-field class="form-field">
+            <mat-select
+              class="form-control"
+              [required]="formFields.type.isRequired"
+              [(ngModel)]="campaignAttributes.campaignType"
+              name="campaignType"
+              (selectionChange)="onCampaignTypeChange($event)"
+            >
+              <mat-option *ngFor="let type of campaignTypes" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-        <mat-form-field class="form-field">
-          <mat-select
-            class="form-control"
-            [required]="formFields.type.isRequired"
-            [(ngModel)]="campaignAttributes.campaignType"
-            name="campaignType"
-            (selectionChange)="onCampaignTypeChange($event)"
-          >
-            <mat-option *ngFor="let type of campaignTypes" [value]="type">
-              {{ type }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
       </div>
       <div class="row padding-cls">
         <div class="col-sm-6 form-group" *ngIf="formFields.name.show">
@@ -311,29 +313,31 @@
       >
         <h4 style="color: #162d9a; margin-left: 10px;">Creative {{ i + 1 }}</h4>
         <mat-card>
-          <div
-            class="form-group padding-cls"
-            *ngIf="formFields.creativeVersion.show"
-          >
-            <div>
-              <label for="creativeVersion">{{
-                formFields.creativeVersion.label
-              }}</label>
+          <div class="row padding-cls">
+            <div
+              class="form-group col-sm-6"
+              *ngIf="formFields.creativeVersion.show"
+            >
+              <div>
+                <label for="creativeVersion">{{
+                  formFields.creativeVersion.label
+                }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].creativeVersion
+                  "
+                  class="form-control"
+                  id="creativeVersion"
+                  [disabled]="disableAll"
+                  name="creativeVersion-{{ i }}"
+                  [required]="formFields.creativeVersion.isRequired"
+                />
+              </mat-form-field>
             </div>
-            <mat-form-field class="form-field">
-              <input
-                matInput
-                type="text"
-                [(ngModel)]="
-                  campaignAttributes.creativeAttributes[i].creativeVersion
-                "
-                class="form-control"
-                id="creativeVersion"
-                [disabled]="disableAll"
-                name="creativeVersion-{{ i }}"
-                [required]="formFields.creativeVersion.isRequired"
-              />
-            </mat-form-field>
           </div>
           <div
             class="form-group padding-cls"
@@ -359,81 +363,89 @@
               />
             </mat-form-field>
           </div>
-          <div
-            class="form-group padding-cls"
-            *ngIf="formFields.subjectLine.show"
-          >
-            <div>
-              <label for="subjectLine">{{
-                formFields.subjectLine.label
-              }}</label>
+          <div class="row padding-cls">
+            <div
+              class="form-group col-sm-6"
+              *ngIf="formFields.subjectLine.show"
+            >
+              <div>
+                <label for="subjectLine">{{
+                  formFields.subjectLine.label
+                }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].subjectLine
+                  "
+                  class="form-control"
+                  id="subjectLine"
+                  [disabled]="disableAll"
+                  name="subjectLine-{{ i }}"
+                  [required]="formFields.subjectLine.isRequired"
+                />
+              </mat-form-field>
             </div>
-            <mat-form-field class="form-field">
-              <input
-                matInput
-                type="text"
-                [(ngModel)]="
-                  campaignAttributes.creativeAttributes[i].subjectLine
-                "
-                class="form-control"
-                id="subjectLine"
-                [disabled]="disableAll"
-                name="subjectLine-{{ i }}"
-                [required]="formFields.subjectLine.isRequired"
-              />
-            </mat-form-field>
+            <div class="form-group col-sm-6" *ngIf="formFields.preHeader.show">
+              <div>
+                <label for="preHeader">{{ formFields.preHeader.label }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].preHeader
+                  "
+                  class="form-control"
+                  id="preHeader"
+                  [disabled]="disableAll"
+                  name="preHeader-{{ i }}"
+                  [required]="formFields.preHeader.isRequired"
+                />
+              </mat-form-field>
+            </div>
           </div>
-          <div class="form-group padding-cls" *ngIf="formFields.preHeader.show">
-            <div>
-              <label for="preHeader">{{ formFields.preHeader.label }}</label>
+          <div class="row padding-cls">
+            <div class="form-group col-sm-6" *ngIf="formFields.keyVisual.show">
+              <div>
+                <label for="keyVisual">{{ formFields.keyVisual.label }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <mat-select
+                  class="form-control"
+                  [required]="formFields.keyVisual.isRequired"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].keyVisual
+                  "
+                  name="keyVisual"
+                  [disabled]="disableAll"
+                >
+                  <mat-option *ngFor="let type of keyVisuals" [value]="type">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-            <mat-form-field class="form-field">
-              <input
-                matInput
-                type="text"
-                [(ngModel)]="campaignAttributes.creativeAttributes[i].preHeader"
-                class="form-control"
-                id="preHeader"
-                [disabled]="disableAll"
-                name="preHeader-{{ i }}"
-                [required]="formFields.preHeader.isRequired"
-              />
-            </mat-form-field>
-          </div>
-          <div class="form-group padding-cls" *ngIf="formFields.keyVisual.show">
-            <div>
-              <label for="keyVisual">{{ formFields.keyVisual.label }}</label>
+            <div class="form-group col-sm-6" *ngIf="formFields.offer.show">
+              <div>
+                <label for="offer">{{ formFields.offer.label }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="campaignAttributes.creativeAttributes[i].offer"
+                  class="form-control"
+                  id="offer"
+                  [disabled]="disableAll"
+                  name="offer-{{ i }}"
+                  [required]="formFields.offer.isRequired"
+                />
+              </mat-form-field>
             </div>
-            <mat-form-field class="form-field">
-              <mat-select
-                class="form-control"
-                [required]="formFields.keyVisual.isRequired"
-                [(ngModel)]="campaignAttributes.creativeAttributes[i].keyVisual"
-                name="keyVisual"
-                [disabled]="disableAll"
-              >
-                <mat-option *ngFor="let type of keyVisuals" [value]="type">
-                  {{ type }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="form-group padding-cls" *ngIf="formFields.offer.show">
-            <div>
-              <label for="offer">{{ formFields.offer.label }}</label>
-            </div>
-            <mat-form-field class="form-field">
-              <input
-                matInput
-                type="text"
-                [(ngModel)]="campaignAttributes.creativeAttributes[i].offer"
-                class="form-control"
-                id="offer"
-                [disabled]="disableAll"
-                name="offer-{{ i }}"
-                [required]="formFields.offer.isRequired"
-              />
-            </mat-form-field>
           </div>
           <div
             class="form-group padding-cls"
@@ -454,7 +466,7 @@
                 "
                 name="audienceSegment-{{ i }}"
                 [disabled]="disableAll"
-                (focus) = "removeSubsegments(i)"
+                (focus)="removeSubsegments(i)"
               >
                 <mat-option
                   *ngFor="let audienceSegment of audienceSegments"
@@ -466,7 +478,11 @@
           </div>
           <div
             class="form-group padding-cls"
-            *ngIf="formFields.audienceSubsegment.show && campaignAttributes.creativeAttributes[i].audienceSegment.length > 0"
+            *ngIf="
+              formFields.audienceSubsegment.show &&
+              campaignAttributes.creativeAttributes[i].audienceSegment.length >
+                0
+            "
           >
             <div>
               <label for="audienceSubsegment">{{

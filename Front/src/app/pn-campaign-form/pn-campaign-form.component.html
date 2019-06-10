@@ -7,23 +7,25 @@
   >
   <form #f1="ngForm" (ngSubmit)="onCampaignAttributeSubmit()">
     <div *ngIf="isCampaignAttributes">
-      <div class="form-group padding-cls" *ngIf="formFields.type.show">
-        <div>
-          <label for="product" mat-line>{{ formFields.type.label }}</label>
+      <div class="row padding-cls">
+        <div class="form-group col-sm-6" *ngIf="formFields.type.show">
+          <div>
+            <label for="product" mat-line>{{ formFields.type.label }}</label>
+          </div>
+          <mat-form-field class="form-field">
+            <mat-select
+              class="form-control"
+              [required]="formFields.type.isRequired"
+              [(ngModel)]="campaignAttributes.campaignType"
+              name="campaignType"
+              (selectionChange)="onCampaignTypeChange($event)"
+            >
+              <mat-option *ngFor="let type of campaignTypes" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-        <mat-form-field class="form-field">
-          <mat-select
-            class="form-control"
-            [required]="formFields.type.isRequired"
-            [(ngModel)]="campaignAttributes.campaignType"
-            name="campaignType"
-            (selectionChange)="onCampaignTypeChange($event)"
-          >
-            <mat-option *ngFor="let type of campaignTypes" [value]="type">
-              {{ type }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
       </div>
       <div class="row padding-cls">
         <div class="col-sm-6 form-group" *ngIf="formFields.name.show">
@@ -382,159 +384,171 @@
               />
             </mat-form-field>
           </div>
+          <div class="row padding-cls">
+            <div
+              class="form-group col-sm-6"
+              *ngIf="formFields.subjectLine.show"
+            >
+              <div>
+                <label for="subjectLine">{{
+                  formFields.subjectLine.label
+                }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].subjectLine
+                  "
+                  class="form-control"
+                  id="subjectLine"
+                  [disabled]="disableAll"
+                  name="subjectLine-{{ i }}"
+                  [required]="formFields.subjectLine.isRequired"
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-group col-sm-6" *ngIf="formFields.preHeader.show">
+              <div>
+                <label for="preHeader">{{ formFields.preHeader.label }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].preHeader
+                  "
+                  class="form-control"
+                  id="preHeader"
+                  [disabled]="disableAll"
+                  name="preHeader-{{ i }}"
+                  [required]="formFields.preHeader.isRequired"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row padding-cls">
+            <div class="form-group col-sm-6" *ngIf="formFields.keyVisual.show">
+              <div>
+                <label for="keyVisual">{{ formFields.keyVisual.label }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <mat-select
+                  class="form-control"
+                  [required]="formFields.keyVisual.isRequired"
+                  [(ngModel)]="
+                    campaignAttributes.creativeAttributes[i].keyVisual
+                  "
+                  name="keyVisual"
+                  [disabled]="disableAll"
+                >
+                  <mat-option *ngFor="let type of keyVisuals" [value]="type">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group col-sm-6" *ngIf="formFields.offer.show">
+              <div>
+                <label for="offer">{{ formFields.offer.label }}</label>
+              </div>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="campaignAttributes.creativeAttributes[i].offer"
+                  class="form-control"
+                  id="offer"
+                  name="offer-{{ i }}"
+                  [disabled]="disableAll"
+                  [required]="formFields.offer.isRequired"
+                />
+              </mat-form-field>
+            </div>
+          </div>
           <div
             class="form-group padding-cls"
-            *ngIf="formFields.subjectLine.show"
+            *ngIf="formFields.audienceSegment.show"
           >
             <div>
-              <label for="subjectLine">{{
-                formFields.subjectLine.label
+              <label for="audienceSegment">{{
+                formFields.audienceSegment.label
               }}</label>
-            </div>
-            <mat-form-field class="form-field">
-              <input
-                matInput
-                type="text"
-                [(ngModel)]="
-                  campaignAttributes.creativeAttributes[i].subjectLine
-                "
-                class="form-control"
-                id="subjectLine"
-                [disabled]="disableAll"
-                name="subjectLine-{{ i }}"
-                [required]="formFields.subjectLine.isRequired"
-              />
-            </mat-form-field>
-          </div>
-          <div class="form-group padding-cls" *ngIf="formFields.preHeader.show">
-            <div>
-              <label for="preHeader">{{ formFields.preHeader.label }}</label>
-            </div>
-            <mat-form-field class="form-field">
-              <input
-                matInput
-                type="text"
-                [(ngModel)]="campaignAttributes.creativeAttributes[i].preHeader"
-                class="form-control"
-                id="preHeader"
-                [disabled]="disableAll"
-                name="preHeader-{{ i }}"
-                [required]="formFields.preHeader.isRequired"
-              />
-            </mat-form-field>
-          </div>
-          <div class="form-group padding-cls" *ngIf="formFields.keyVisual.show">
-            <div>
-              <label for="keyVisual">{{ formFields.keyVisual.label }}</label>
             </div>
             <mat-form-field class="form-field">
               <mat-select
                 class="form-control"
-                [required]="formFields.keyVisual.isRequired"
-                [(ngModel)]="campaignAttributes.creativeAttributes[i].keyVisual"
-                name="keyVisual"
+                multiple
+                [required]="formFields.audienceSegment.isRequired"
+                [(ngModel)]="
+                  campaignAttributes.creativeAttributes[i].audienceSegment
+                "
+                name="audienceSegment-{{ i }}"
                 [disabled]="disableAll"
+                (focus)="removeSubsegments(i)"
               >
-                <mat-option *ngFor="let type of keyVisuals" [value]="type">
-                  {{ type }}
-                </mat-option>
+                <mat-option
+                  *ngFor="let audienceSegment of audienceSegments"
+                  [value]="audienceSegment.segment"
+                  >{{ audienceSegment.segment }}</mat-option
+                >
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="form-group padding-cls" *ngIf="formFields.offer.show">
+          <div
+            class="form-group padding-cls"
+            *ngIf="
+              formFields.audienceSubsegment.show &&
+              campaignAttributes.creativeAttributes[i].audienceSegment.length >
+                0
+            "
+          >
             <div>
-              <label for="offer">{{ formFields.offer.label }}</label>
+              <label for="audienceSubsegment">{{
+                formFields.audienceSubsegment.label
+              }}</label>
             </div>
             <mat-form-field class="form-field">
-              <input
-                matInput
-                type="text"
-                [(ngModel)]="campaignAttributes.creativeAttributes[i].offer"
-                class="form-control"
-                id="offer"
-                name="offer-{{ i }}"
-                [disabled]="disableAll"
-                [required]="formFields.offer.isRequired"
-              />
+              <mat-chip-list #chipList>
+                <mat-chip
+                  *ngFor="
+                    let segment of campaignAttributes.creativeAttributes[i]
+                      .audienceSubsegment
+                  "
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="remove(segment, i)"
+                >
+                  {{ segment }}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Search..."
+                  #audienceSubsegmentInput
+                  [formControl]="audienceSubsegmentCtrl"
+                  [matAutocomplete]="auto"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="add($event, i)"
+                  (focus)="addSubsegment(i)"
+                />
+              </mat-chip-list>
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="selected($event, i)"
+              >
+                <mat-option
+                  *ngFor="let segment of filteredAudienceSubsegment | async"
+                  [value]="segment"
+                >
+                  {{ segment }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
-          <div
-          class="form-group padding-cls"
-          *ngIf="formFields.audienceSegment.show"
-        >
-          <div>
-            <label for="audienceSegment">{{
-              formFields.audienceSegment.label
-            }}</label>
-          </div>
-          <mat-form-field class="form-field">
-            <mat-select
-              class="form-control"
-              multiple
-              [required]="formFields.audienceSegment.isRequired"
-              [(ngModel)]="
-                campaignAttributes.creativeAttributes[i].audienceSegment
-              "
-              name="audienceSegment-{{ i }}"
-              [disabled]="disableAll"
-              (focus) = "removeSubsegments(i)"
-            >
-              <mat-option
-                *ngFor="let audienceSegment of audienceSegments"
-                [value]="audienceSegment.segment"
-                >{{ audienceSegment.segment }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div
-          class="form-group padding-cls"
-          *ngIf="formFields.audienceSubsegment.show && campaignAttributes.creativeAttributes[i].audienceSegment.length > 0"
-        >
-          <div>
-            <label for="audienceSubsegment">{{
-              formFields.audienceSubsegment.label
-            }}</label>
-          </div>
-          <mat-form-field class="form-field">
-            <mat-chip-list #chipList>
-              <mat-chip
-                *ngFor="
-                  let segment of campaignAttributes.creativeAttributes[i]
-                    .audienceSubsegment
-                "
-                [selectable]="selectable"
-                [removable]="removable"
-                (removed)="remove(segment, i)"
-              >
-                {{ segment }}
-                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-              </mat-chip>
-              <input
-                placeholder="Search..."
-                #audienceSubsegmentInput
-                [formControl]="audienceSubsegmentCtrl"
-                [matAutocomplete]="auto"
-                [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                [matChipInputAddOnBlur]="addOnBlur"
-                (matChipInputTokenEnd)="add($event, i)"
-                (focus)="addSubsegment(i)"
-              />
-            </mat-chip-list>
-            <mat-autocomplete
-              #auto="matAutocomplete"
-              (optionSelected)="selected($event, i)"
-            >
-              <mat-option
-                *ngFor="let segment of filteredAudienceSubsegment | async"
-                [value]="segment"
-              >
-                {{ segment }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
         </mat-card>
       </div>
       <div class="next-div">
