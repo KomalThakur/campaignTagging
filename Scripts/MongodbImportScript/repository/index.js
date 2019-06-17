@@ -1,0 +1,1 @@
+module.exports.populationDao = require('./population');

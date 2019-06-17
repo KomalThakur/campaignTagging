@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const json2csv = require("json2csv").parse;
 const type = "csv"; // can be json too
-var cronJob = cron.job("* * 8 * * *", async function() {
+var cronJob = cron.job("00 00 08 * * *", async function() {
   try {
     let startTime = moment()
       .subtract(1, "days")

@@ -1,0 +1,23 @@
+{
+  "name": "mongodbexportscript",
+  "version": "1.0.0",
+  "description": "mongodb export script",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cron": "^1.7.1",
+    "csvtojson": "^2.0.8",
+    "json2csv": "^4.5.1",
+    "lodash": "^4.17.11",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.25",
+    "mongoose": "^5.5.7",
+    "nodemon": "^1.19.0"
+  }
+}
