@@ -93,6 +93,7 @@ export class PnCampaignFormComponent {
     audienceSubsegment: [],
     marketingId: "",
     showTarget: false,
+    fetch: false,
     targetValue: 0
   };
 
@@ -177,6 +178,7 @@ export class PnCampaignFormComponent {
     this.campaignAttributes.creativeAttributes[index].audienceSubsegment = [];
     this.audienceSubsegmentCtrl.setValue("abd");
   }
+  
   addSubsegment(index) {
     let currentAS = this.campaignAttributes.creativeAttributes[index]
       .audienceSegment;
@@ -184,9 +186,10 @@ export class PnCampaignFormComponent {
     _.each(this.audienceSegments, seg => {
       if (currentAS.indexOf(seg.segment) >= 0) {
         if (seg.subsegment.length > 0) {
-          this.audienceSubsegments = this.audienceSubsegments.concat(
-            seg.subsegment
-          );
+          _.each(seg.subsegment, ele => {
+            this.audienceSubsegments.push(ele + " (" + seg.segment +")");
+          });
+          // this.audienceSubsegments = this.audienceSubsegments.concat(seg.subsegment);
         }
       }
     });
@@ -427,16 +430,16 @@ export class PnCampaignFormComponent {
     );
     if (nodeSelected && !descAllSelected) {
       this.checklistSelection.deselect(node);
-    } 
+    }
   }
-  
+
   todoItemSelectionDeselect(node: TodoItemFlatNode): void {
     this.checklistSelection.deselect(node);
     const descendants = this.treeControl.getDescendants(node);
-    if(this.checklistSelection.isSelected(node)) {
+    if (this.checklistSelection.isSelected(node)) {
       this.checklistSelection.deselect(...descendants);
     }
-  
+
     // Force update for the parent
     descendants.every(child => this.checklistSelection.isSelected(child));
     this.checkAllParentsSelectionDeselect(node);
@@ -514,7 +517,6 @@ export class PnCampaignFormComponent {
   }
 
   //chips autocomplete
-
   add(event: MatChipInputEvent, index): void {
     // Add fruit only when MatAutocomplete is not open
     // To make sure this does not conflict with OptionSelected Event
@@ -549,6 +551,7 @@ export class PnCampaignFormComponent {
         1
       );
     }
+    this.showTargetAudience(i);
   }
 
   selected(event: MatAutocompleteSelectedEvent, index): void {
@@ -557,6 +560,7 @@ export class PnCampaignFormComponent {
     );
     this.fruitInput.nativeElement.value = "";
     this.audienceSubsegmentCtrl.setValue(null);
+    this.showTargetAudience(index);
   }
 
   private _filter(value: string): string[] {
@@ -568,11 +572,38 @@ export class PnCampaignFormComponent {
   }
 
   async showTargetAudience(index) {
-    if(this.campaignAttributes.creativeAttributes[index].audienceSegment.length !== 0) {
-      this.campaignAttributes.creativeAttributes[index].targetValue = await this.dataStorageService.getTargetAudience(this.campaignAttributes.creativeAttributes[index].audienceSegment);
-      this.campaignAttributes.creativeAttributes[index].showTarget = true;
+    let that = this;
+    if (
+      that.campaignAttributes.creativeAttributes[index].audienceSegment
+        .length !== 0
+    ) {
+      let serverData = [];
+      _.each(
+        that.campaignAttributes.creativeAttributes[index].audienceSubsegment,
+        ele => {
+          let splitArr = ele.split("(");
+          if (splitArr.length !== 1) {
+            serverData.push(
+              splitArr[1].substring(0, splitArr[1].length - 1) +
+                "_" +
+                splitArr[0].trim()
+            );
+          }
+        }
+      );
+      console.log(serverData);
+      that.campaignAttributes.creativeAttributes[index].fetch = true;
+      that.campaignAttributes.creativeAttributes[index].showTarget = false;
+      that.campaignAttributes.creativeAttributes[
+        index
+      ].targetValue = await that.dataStorageService.getTargetAudience({
+        audienceSubsegment: serverData,
+        channel: that.campaignAttributes.channel
+      });
+      that.campaignAttributes.creativeAttributes[index].showTarget = true;
+      that.campaignAttributes.creativeAttributes[index].fetch = false;
     } else {
-      this.campaignAttributes.creativeAttributes[index].showTarget = false;
+      that.campaignAttributes.creativeAttributes[index].showTarget = false;
     }
   }
 }

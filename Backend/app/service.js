@@ -4,7 +4,7 @@ const {
   campaignsDao,
   formDataDao,
   userDao,
-  targetDao
+  populationDao
 } = require("./repository");
 var hash = require("object-hash");
 
@@ -68,13 +68,13 @@ function getUserProfile(request) {
 
 async function getTargetData(request) {
   try {
-    let dataArray = await targetDao.getSpecificTargets(request.body.audienceSegment);
+    let dataArray = await populationDao.getSpecificTargets(request.body);
+    console.log("dataArray : " ,dataArray)
     let total = 0;
     if (!_.isNil(dataArray) && dataArray.length !== 0) {
-      _.each(dataArray, ele => {
-        total = total + ele.value;
-      });
+     total = dataArray[0].sum
     }
+    console.log(total);
 
     return {
       value: total

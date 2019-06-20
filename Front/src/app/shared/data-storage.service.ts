@@ -160,7 +160,7 @@ export class DataStorageService {
   getTargetAudience(data) {
     console.log("inside get target audience");
     return this.http
-      .post(this.baseUrl + "target", {audienceSegment : data}, {
+      .post(this.baseUrl + "target",  data, {
         headers: new Headers({
           "Content-Type": "application/json",
         })

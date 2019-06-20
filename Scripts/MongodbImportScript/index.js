@@ -8,7 +8,7 @@ const json2csv = require("json2csv").parse;
 const type = "csv"; // can be json too
 var csv = require("csvtojson");
 const _ = require('lodash');
-var cronJob = cron.job("00 07 16 * * *", async function() {
+var cronJob = cron.job("00 38 16 * * *", async function() {
   try {
     let filePath = path.join(__dirname, "../../../imports", "export_testdata.csv")
     let jsonArray=await csv().fromFile(filePath);
@@ -36,7 +36,7 @@ function modifyJson(jsonArray) {
 
 async function createMongooseConnectionWithUrl() {
   await mongoose.connect(
-    "mongodb://localhost:27017/campaign_tagging",
+"mongodb://localhost:27017/campaign_tagging",
     { useNewUrlParser: true }
   );
   mongoose.set("useCreateIndex", true);

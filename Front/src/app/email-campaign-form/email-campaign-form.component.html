@@ -476,11 +476,6 @@
                 >
               </mat-select>
             </mat-form-field>
-            <div *ngIf="campaignAttributes.creativeAttributes[i].showTarget">
-              <label for="target" class="target-div">
-                Your Customer reach is {{ campaignAttributes.creativeAttributes[i].targetValue }}
-              </label>
-            </div>
           </div>
           <div
             class="form-group padding-cls"
@@ -533,6 +528,16 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
+             <div *ngIf="campaignAttributes.creativeAttributes[i].showTarget">
+              <label for="target" class="target-div">
+                Your Customer reach is {{ campaignAttributes.creativeAttributes[i].targetValue }}
+              </label>
+            </div>
+            <div *ngIf="campaignAttributes.creativeAttributes[i].fetch">
+              <label for="target" class="target-div" style="color: gray">
+                Fetching Customer reach....
+              </label>
+            </div>
           </div>
         </mat-card>
       </div>

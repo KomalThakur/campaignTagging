@@ -90,6 +90,7 @@ export class EmailCampaignFormComponent implements OnInit {
     audienceSegment: [],
     audienceSubsegment: [],
     showTarget: false,
+    fetch : false,
     targetValue: 0
   };
 
@@ -170,7 +171,7 @@ export class EmailCampaignFormComponent implements OnInit {
     this.isCreativeAttributes = false;
   }
 
-  removeSubsegments(index) {
+  Subsegments(index) {
     this.campaignAttributes.creativeAttributes[index].audienceSubsegment = [];
     this.audienceSubsegmentCtrl.setValue("abd");
   }
@@ -321,10 +322,10 @@ export class EmailCampaignFormComponent implements OnInit {
   todoItemSelectionDeselect(node: TodoItemFlatNode): void {
     this.checklistSelection.deselect(node);
     const descendants = this.treeControl.getDescendants(node);
-    if(this.checklistSelection.isSelected(node)) {
+    if (this.checklistSelection.isSelected(node)) {
       this.checklistSelection.deselect(...descendants);
     }
-  
+
     // Force update for the parent
     descendants.every(child => this.checklistSelection.isSelected(child));
     this.checkAllParentsSelectionDeselect(node);
@@ -366,8 +367,8 @@ export class EmailCampaignFormComponent implements OnInit {
     }
   }
 
-   /** Check root node checked state and change it accordingly */
-   checkRootNodeSelectionDeselect(node: TodoItemFlatNode): void {
+  /** Check root node checked state and change it accordingly */
+  checkRootNodeSelectionDeselect(node: TodoItemFlatNode): void {
     const nodeSelected = this.checklistSelection.isSelected(node);
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected = descendants.every(child =>
@@ -375,7 +376,7 @@ export class EmailCampaignFormComponent implements OnInit {
     );
     if (nodeSelected && !descAllSelected) {
       this.checklistSelection.deselect(node);
-    } 
+    }
   }
 
   /* Get the parent node of a node */
@@ -436,7 +437,10 @@ export class EmailCampaignFormComponent implements OnInit {
     _.each(this.audienceSegments, seg => {
       if (currentAS.indexOf(seg.segment) >= 0) {
         if (seg.subsegment.length > 0) {
-          this.audienceSubsegments = this.audienceSubsegments.concat(seg.subsegment);
+          _.each(seg.subsegment, ele => {
+            this.audienceSubsegments.push(ele + " (" + seg.segment +")");
+          });
+          // this.audienceSubsegments = this.audienceSubsegments.concat(seg.subsegment);
         }
       }
     });
@@ -468,7 +472,7 @@ export class EmailCampaignFormComponent implements OnInit {
             this.campaignAttributes.name + "-" + event.value;
           this.campaignAttributes.channel = "Email";
           console.log("Campaign type : ", event.value);
-          console.log("Products selected : ", this.campaignAttributes.product)
+          console.log("Products selected : ", this.campaignAttributes.product);
           this.removeMarketingId();
           this.deSelectTreeNodes();
           this.selectTreeNodes(this.campaignAttributes.product);
@@ -524,6 +528,7 @@ export class EmailCampaignFormComponent implements OnInit {
       }
 
       this.audienceSubsegmentCtrl.setValue(null);
+      
     }
   }
 
@@ -538,6 +543,7 @@ export class EmailCampaignFormComponent implements OnInit {
         1
       );
     }
+    this.showTargetAudience(i);
   }
 
   selected(event: MatAutocompleteSelectedEvent, index): void {
@@ -546,6 +552,7 @@ export class EmailCampaignFormComponent implements OnInit {
     );
     this.fruitInput.nativeElement.value = "";
     this.audienceSubsegmentCtrl.setValue(null);
+    this.showTargetAudience(index);
   }
 
   private _filter(value: string): string[] {
@@ -556,12 +563,36 @@ export class EmailCampaignFormComponent implements OnInit {
     );
   }
 
- async showTargetAudience(index) {
-    if(this.campaignAttributes.creativeAttributes[index].audienceSegment.length !== 0) {
-      this.campaignAttributes.creativeAttributes[index].targetValue = await this.dataStorageService.getTargetAudience(this.campaignAttributes.creativeAttributes[index].audienceSegment);
-      this.campaignAttributes.creativeAttributes[index].showTarget = true;
-    } else {
-      this.campaignAttributes.creativeAttributes[index].showTarget = false;
-    }
+  async showTargetAudience(index) {
+    let that = this;
+      if (
+        that.campaignAttributes.creativeAttributes[index].audienceSegment
+          .length !== 0
+      ) {
+        let serverData = [];
+        _.each(
+          that.campaignAttributes.creativeAttributes[index].audienceSubsegment,
+          ele => {
+
+            let splitArr = ele.split("(");
+            if (splitArr.length !== 1) {
+              serverData.push(splitArr[1].substring(0, splitArr[1].length -1) + "_" + splitArr[0].trim());
+            }
+          }
+        );
+        console.log(serverData);
+        that.campaignAttributes.creativeAttributes[index].fetch = true;
+        that.campaignAttributes.creativeAttributes[index].showTarget = false;
+        that.campaignAttributes.creativeAttributes[
+          index
+        ].targetValue = await that.dataStorageService.getTargetAudience({
+          audienceSubsegment: serverData,
+          channel: that.campaignAttributes.channel
+        });
+        that.campaignAttributes.creativeAttributes[index].showTarget = true;
+        that.campaignAttributes.creativeAttributes[index].fetch = false;
+      } else {
+        that.campaignAttributes.creativeAttributes[index].showTarget = false;
+      }
   }
 }
