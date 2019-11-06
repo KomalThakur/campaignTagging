@@ -81,6 +81,25 @@ export class DataStorageService {
       });
   }
 
+  getAllCampaignInfo() {
+    return this.http
+      .get(this.baseUrl + "campaignInfo/all", {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.getToken()
+        })
+      })
+      .toPromise()
+      .then(response => {
+        let res = response.json();
+        return res.data;
+      })
+      .catch(err => {
+        console.log(err.json());
+        throw err.json()
+      });
+  }
+
   getCampaignsByUser() {
     return this.http
       .get(this.baseUrl + "campaign/user", {
@@ -120,9 +139,47 @@ export class DataStorageService {
       });
   }
 
+  async getCampaignInfoById(id) {
+    return this.http
+      .get(this.baseUrl + "campaignInfoId/" + id, {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.getToken()
+        })
+      })
+      .toPromise()
+      .then(response => {
+       return response.json();
+        
+      })
+      .catch(err => {
+        console.log(err.json());
+        throw err.json();
+      });
+  }
+
+
   updateFormData(data) {
     return this.http
       .post(this.baseUrl + "data", data, {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.getToken()
+        })
+      })
+      .toPromise()
+      .then(res => {
+        return res.json();
+      })
+      .catch(err => {
+        console.log(err.json());
+        throw err.json();
+      });
+  }
+
+  updateCampaignInfoData(data) {
+    return this.http
+      .post(this.baseUrl + "campaignInfo", data, {
         headers: new Headers({
           "Content-Type": "application/json",
           Authorization: "Bearer " + this.getToken()

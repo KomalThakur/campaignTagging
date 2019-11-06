@@ -10,6 +10,7 @@ async function getAllCampaigns(req, res, next) {
   } else {
     try {
       let campaigns = await campaignService.getAllCampaigns(req);
+      console.log(campaigns);
       res.status(200);
       res.send({
         data : campaigns,
@@ -49,7 +50,8 @@ async function createCampaign(req, res, next) {
     })
   } else {
     try {
-      await campaignService.createCampaign(req);
+      let camp = await campaignService.createCampaign(req);
+      await campaignService.createCampaignInfo(camp.campaignId);
       res.status(201);
       res.send({
         data : {},
@@ -185,6 +187,70 @@ async function getTargetData(req, res, next) {
     }
 }
 
+
+async function getAllCampaignInfo(req, res, next) {
+  if (!req.payload._id) {
+    next({
+      status : 401,
+      message : 'Unauthorised'
+    })
+  } else {
+    try {
+      let campaigns = await campaignService.getAllCampaignInfo(req);
+      res.status(200);
+      res.send({
+        data : campaigns,
+        status : 200,
+        message : "Success"});
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+
+
+async function getCampaignInfoById(req, res, next) {
+  if (!req.payload._id) {
+    next({
+      status : 401,
+      message : 'Unauthorised'
+    })
+  } else {
+    try {
+      let campaigns = await campaignService.getCampaignInfoById(req);
+      res.status(200);
+      res.send({
+        data : campaigns,
+        status : 200,
+        message : "Success"});
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+
+
+async function updateCampaignInfo(req, res, next) {
+  if (!req.payload._id) {
+    next({
+      status : 401,
+      message : 'Unauthorised'
+    })
+  } else {
+    try {
+      await campaignService.updateCampaignInfo(req);
+      res.status(201);
+      res.send({
+        data : {},
+        status : 201,
+        message : "Success"});
+    } catch (error) {
+      next(error); 
+    }
+  }
+}
+
+
 module.exports = {
   getAllCampaigns,
   getCampaignsByUser,
@@ -194,5 +260,8 @@ module.exports = {
   registerUser,
   loginUser,
   getUserProfile,
-  getTargetData
+  getTargetData,
+  getAllCampaignInfo,
+  getCampaignInfoById,
+  updateCampaignInfo
 };

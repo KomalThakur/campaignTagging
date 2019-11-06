@@ -4,7 +4,8 @@ const {
   campaignsDao,
   formDataDao,
   userDao,
-  populationDao
+  populationDao,
+  campaignsInfoDao
 } = require("./repository");
 var hash = require("object-hash");
 
@@ -69,10 +70,10 @@ function getUserProfile(request) {
 async function getTargetData(request) {
   try {
     let dataArray = await populationDao.getSpecificTargets(request.body);
-    console.log("dataArray : " ,dataArray)
+    console.log("dataArray : ", dataArray);
     let total = 0;
     if (!_.isNil(dataArray) && dataArray.length !== 0) {
-     total = dataArray[0].sum
+      total = dataArray[0].sum;
     }
     console.log(total);
 
@@ -84,6 +85,39 @@ async function getTargetData(request) {
   }
 }
 
+async function updateCampaignInfo(request) {
+  let { body } = request;
+  console.log(body.campaignInfos.length);
+  for (let i = 0; i < body.campaignInfos.length; i++) {
+    if(!_.isNil(body.campaignInfos[i].isChange) && body.campaignInfos[i].isChange === true)
+      await campaignsInfoDao.updateCampaignInfo(body.campaignInfos[i]);
+  }
+  return "success";
+}
+
+function createCampaignInfo(id) {
+  return campaignsInfoDao.updateCampaignInfo({
+    campaignId: id,
+    sendCount: "",
+    engagement: {
+      or: "",
+      ctor: "",
+      ctr: ""
+    },
+    conversions: {
+      targetCategory: "",
+      allCategories: ""
+    }
+  });
+}
+function getCampaignInfoById(request) {
+  return campaignsInfoDao.getCampaignInfoById(request.params.id);
+}
+
+function getAllCampaignInfo(request) {
+  return campaignsInfoDao.getAllCampaignInfo();
+}
+
 module.exports = {
   createCampaign,
   getCampaignsByUser,
@@ -92,5 +126,9 @@ module.exports = {
   createFormData,
   registerUser,
   getUserProfile,
-  getTargetData
+  getTargetData,
+  updateCampaignInfo,
+  getCampaignInfoById,
+  getAllCampaignInfo,
+  createCampaignInfo
 };

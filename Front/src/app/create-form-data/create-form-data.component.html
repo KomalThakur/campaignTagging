@@ -1,33 +1,195 @@
-
 <app-header></app-header>
-<mat-card class="form-card" style="margin: 1px 0 0 0">
-  <div class="form-sub-section">
-    <h4 class="form-title"
-      >PLEASE UPDATE THE FORM DATA :
-  </h4>
-    <mat-form-field class="form-field">
-      <textarea
-        matInput
-        type="text"
-        [(ngModel)]="formData"
-        class="form-control"
-        id="formData"
-        name="formData"
-        rows="40"
-        style="background-color: #f1f1f1;"
-      ></textarea>
-    </mat-form-field>
-    <div align="end" style="padding-bottom: 10px;">
-      <button
-        mat-raised-button
-        style="background-color: #162d9a; color: white"
-        (click)="update()"
-      >
-        Submit
-      </button>
-    </div>
-  </div>
-</mat-card>
+<mat-tab-group>
+  <mat-tab label="Update Form Data">
+    <mat-card class="form-card" style="margin: 1px 0 0 0">
+      <div class="form-sub-section">
+        <h4 class="form-title">PLEASE UPDATE THE FORM DATA :</h4>
+        <mat-form-field class="form-field">
+          <textarea
+            matInput
+            type="text"
+            [(ngModel)]="formData"
+            class="form-control"
+            id="formData"
+            name="formData"
+            rows="40"
+            style="background-color: #f1f1f1;"
+          ></textarea>
+        </mat-form-field>
+        <div align="end" style="padding-bottom: 10px;">
+          <button
+            mat-raised-button
+            style="background-color: #162d9a; color: white"
+            (click)="update()"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Update KPIs"
+    ><mat-card class="form-card" style="margin: 1px 0 0 0;">
+      <h4 class="form-title" style="margin-left: 10px;">
+        PLEASE UPDATE CAMPAIGNS INFORMATION :
+      </h4>
+      <div class="mat-elevation-z8" style="padding: 10px; margin-top: 10px;" *ngIf="campaignsInfo.length <= 0">
+        <h5> No Campaigns Available for update</h5>
+      </div>
+      <div class="mat-elevation-z8" style="padding: 10px; margin-top: 10px;" *ngIf="campaignsInfo.length > 0">
+        <table mat-table [dataSource]="dataSource" style="min-width: 100%;">
+          <!-- Position Column -->
+          <ng-container matColumnDef="campaignId">
+            <th mat-header-cell *matHeaderCellDef style="width: 22%;text-align: center;">
+              Campaign Id
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.campaignId }}</td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="sendCount">
+            <th mat-header-cell *matHeaderCellDef style="width: 13%;text-align: center;">
+              Send Count
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field  class="form-field-1">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="element.sendCount"
+                  class="form-control"
+                  id="sendCount"
+                  name="sendCount"
+                  style="background-color: #f1f1f1;"
+                  (change)="element.isChange = true"
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="or">
+            <th mat-header-cell *matHeaderCellDef style="width: 13%;text-align: center;">OR</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field class="form-field-1">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="element.engagement.or"
+                  class="form-control"
+                  id="or"
+                  name="or"
+                  style="background-color: #f1f1f1;"
+                  (change)="element.isChange = true"
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="ctor">
+            <th mat-header-cell *matHeaderCellDef style="width: 13%;text-align: center;">CTOR</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field class="form-field-1">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="element.engagement.ctor"
+                  class="form-control"
+                  id="ctor"
+                  name="ctor"
+                  style="background-color: #f1f1f1;"
+                  (change)="element.isChange = true"
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="ctr">
+            <th mat-header-cell *matHeaderCellDef style="width: 13%; text-align: center;">CTR</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field  class="form-field-1">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="element.engagement.ctr"
+                  class="form-control"
+                  id="ctr"
+                  name="ctr"
+                  style="background-color: #f1f1f1;"
+                  (change)="element.isChange = true"
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="targetCategory">
+            <th mat-header-cell *matHeaderCellDef style="width: 13%; text-align: center;">
+              Target Category
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field  class="form-field-1">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="element.conversions.targetCategory"
+                  class="form-control"
+                  id="targetCategory"
+                  name="targetCategory"
+                  style="background-color: #f1f1f1;"
+                  (change)="element.isChange = true"
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="allCategories">
+            <th mat-header-cell *matHeaderCellDef style="width: 13%; text-align: center">
+              All Categories
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field  class="form-field-1">
+                <input
+                  matInput
+                  type="text"
+                  [(ngModel)]="element.conversions.allCategories"
+                  class="form-control"
+                  id="allCategories"
+                  name="allCategories"
+                  style="background-color: #f1f1f1;"
+                  (change)="element.isChange = true"
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        [hidden]="campaignsInfo.length <= 0"
+      ></mat-paginator>
+      <div align="end" style="padding-bottom: 10px; padding-right: 10px;" *ngIf="campaignsInfo.length > 0">
+        <button
+          mat-raised-button
+          style="background-color: #162d9a; color: white"
+          (click)="updateInfo()"
+        >
+          Submit
+        </button>
+      </div>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>
 <div class="loading-indicator" *ngIf="isLoading">
-  <mat-progress-spinner mode="indeterminate" style="color: #162d9a"></mat-progress-spinner>
+  <mat-progress-spinner
+    mode="indeterminate"
+    style="color: #162d9a"
+  ></mat-progress-spinner>
 </div>

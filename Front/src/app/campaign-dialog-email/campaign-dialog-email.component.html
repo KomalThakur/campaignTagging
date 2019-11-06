@@ -163,6 +163,38 @@
       <div class="col-sm-4"></div>
     </div>
   </div>
+  <div *ngIf="data.campaignInfo">
+    <h1 mat-dialog-title>KPIs:</h1>
+    <div class="row">
+      <div class="col-sm-4"><p>Send Count: <span>{{data.campaignInfo.sendCount}}</span></p></div>
+      <div class="col-sm-4">
+        <p>
+         Engagement: 
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <p>
+          Conversions:
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <ol>
+          <li>OR : {{ data.campaignInfo.engagement.or.length > 0 ? data.campaignInfo.engagement.or.length : "NA" }}</li>
+          <li>CTOR : {{ data.campaignInfo.engagement.ctor.length > 0 ? data.campaignInfo.engagement.ctor : "NA" }}</li>
+          <li>CTR : {{ data.campaignInfo.engagement.ctr.length > 0 ? data.campaignInfo.engagement.ctr : "NA" }}</li>
+        </ol>
+      </div>
+      <div class="col-sm-4">
+        <ol>
+            <li>Target Category : {{ data.campaignInfo.conversions.targetCategory.length > 0 ? data.campaignInfo.conversions.targetCategory : "NA" }}</li>
+            <li>All Categories : {{ data.campaignInfo.conversions.allCategories.length > 0 ? data.campaignInfo.conversions.allCategories : "NA" }}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
   <div mat-dialog-actions align="end">
     <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Close</button>
   </div>

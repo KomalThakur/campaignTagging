@@ -83,7 +83,12 @@ export class CampaignsComponent implements OnInit {
       );
     }
   }
-  openCampaignModal(campaign) {
+  async openCampaignModal(campaign) {
+    this.isLoading = true;
+    let campaignInfo  = await this.dataStorageService.getCampaignInfoById(campaign.campaignId);
+    if(!_.isNil(campaignInfo.data) && !_.isEmpty(campaignInfo.data))
+      campaign.campaignInfo = campaignInfo.data;
+    this.isLoading = false;
     const dialogRef = this.dialog.open(CampaignDialogEmailComponent, {
       width: "1000px",
       data: campaign
